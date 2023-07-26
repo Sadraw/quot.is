@@ -1,6 +1,10 @@
 # 😃 quot.is
 
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![License: GPL-2.0](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0)
+
+## License
+
+quot.is is open-source software licensed under the [GNU General Public License v2.0 (GPL-2.0)](https://www.gnu.org/licenses/gpl-2.0). Feel free to use, modify, and distribute the code while adhering to the terms of the GPL-2.0 License.
 
 ## Description
 
