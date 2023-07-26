@@ -5,6 +5,24 @@
     "quot.is": "^1.0.2"
   },
   "name": "quot.is",
-  "version": "2.0.2",
-  "license": "GPL-2.0"
+  "version": "2.0.3",
+  "license": "GPL-2.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sadraw/quot.is.git"
+  },
+  "keywords": [
+    "quotes"
+  ],
+  "author": "Sadra Daneshmand",
+  "bugs": {
+    "url": "https://github.com/Sadraw/quot.is/issues"
+  },
+  "homepage": "https://github.com/Sadraw/quot.is#readme",
+  "description": ""
 }
