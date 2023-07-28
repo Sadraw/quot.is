@@ -11,7 +11,6 @@ function App() {
             width="640"
             height="320"
           />
-          Learn React
     </div>
   );
 }
