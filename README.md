@@ -14,7 +14,7 @@ quot.is is a delightful platform that offers a collection of inspiring quotes an
 
 The **quot.is** website showcases a beautifully designed and interactive platform that provides a seamless browsing experience to explore a vast collection of quotes and fun facts.
 
-## Android App
+## [Android App](https://github.com/alizeyn/Quot)
 
 Take inspiration on-the-go with the **quot.is** Android app, which serves as a portable source of daily wisdom. The app offers a user-friendly interface and allows users to access their favorite quotes and fun facts anytime, anywhere.
 
