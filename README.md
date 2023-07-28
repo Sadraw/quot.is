@@ -41,3 +41,5 @@ We welcome contributions from the open-source community. If you'd like to contri
 ## License
 
 quot.is is open-source software licensed under the [**ISC License**](LICENSE). Feel free to use, modify, and distribute the code while adhering to the terms of the ISC License.
+
+<img src="https://socialify.git.ci/Sadraw/quot.is/image?description=1&font=Jost&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Dark" alt="quot.is" width="640" height="320" />
