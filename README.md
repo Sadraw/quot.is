@@ -4,11 +4,11 @@
 
 ## License
 
-quot.is is open-source software licensed under the [GNU General Public License v2.0 (GPL-2.0)](https://www.gnu.org/licenses/gpl-2.0). Feel free to use, modify, and distribute the code while adhering to the terms of the GPL-2.0 License.
+**quot.is** is open-source software licensed under the [GNU General Public License v2.0 (GPL-2.0)](https://www.gnu.org/licenses/gpl-2.0). Feel free to use, modify, and distribute the code while adhering to the terms of the GPL-2.0 License.
 
 ## Description
 
-quot.is is a delightful platform that offers a collection of inspiring quotes and captivating fun facts to spark curiosity and ignite inspiration. It's a gateway to endless wisdom, where users can access thoughtfully curated quotes and intriguing facts that **enlighten**, **motivate**, and **entertain**.
+**quot.is** is a delightful platform that offers a collection of inspiring quotes and captivating fun facts to spark curiosity and ignite inspiration. It's a gateway to endless wisdom, where users can access thoughtfully curated quotes and intriguing facts that **enlighten**, **motivate**, and **entertain**.
 
 ## Website
 
