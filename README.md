@@ -1,4 +1,4 @@
-# 😃 quot.is
+#  quot.is
 
 [![License: GPL-2.0](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0)
 
