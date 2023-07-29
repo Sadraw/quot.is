@@ -23,7 +23,7 @@ app.use(cors());
 
 
 // FETCHING THE QUOTES 
-app.get('/quotes', (req, res) => {
+app.get('/v1', (req, res) => {
     const sql = 'SELECT * FROM quotes';
     db.query(sql, (err, result) => {
         if (err) {
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 })
 
 // Fetch a single quote by ID 
-app.get('/quote/:id', (req, res) => {
+app.get('/v1/:id', (req, res) => {
     const id    = req.params.id;
     const sql   = 'SELECT * FROM quotes WHERE id = ?';
     db.query(sql, [id], (err, result) => {
@@ -96,5 +96,6 @@ app.get('/categories', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log('Server is doing something on port ${port}');
+    console.log(`Server is doing something on port ${port}`);
+
 });
