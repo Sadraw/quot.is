@@ -1,3 +1,5 @@
+// server.js
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -6,9 +8,7 @@ const app = express();
 const port = 5000;
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" }); // Load the environment variables from .env
-
-const crypto = require("crypto");
-const apiKey = require("../api-key"); // Require the API key from the separate file
+const apiKey = require("../api-key"); // Import the API key from api-key.js
 
 const Category = {
   name: String,
@@ -26,20 +26,15 @@ app.use(cors());
 
 // Middleware for /v1/ endpoint
 app.use("/v1", (req, res, next) => {
-  res.locals.welcomeMessage = "Welcome to Version 1 of the quot.is API";
-  next();
-});
+  const clientApiKey = req.header("Authorization");
 
-// Middleware to validate the API key in the request header
-const validateApiKey = (req, res, next) => {
-  const apiKeyHeader = req.header("x-api-key");
-
-  if (!apiKeyHeader || apiKeyHeader !== apiKey) {
+  if (!clientApiKey || clientApiKey !== `Bearer ${apiKey}`) {
     return res.status(401).json({ error: "Invalid API key" });
   }
 
+  res.locals.welcomeMessage = "Welcome to Version 1 of the quot.is API";
   next();
-};
+});
 
 // Fetching all quotes (version 1)
 app.get("/v1/quotes", (req, res) => {
@@ -82,7 +77,7 @@ app.get("/v1/quote/:id", (req, res) => {
 });
 
 // Fetch a random quote based on client's preferred categories (version 1)
-app.get("/v1/quote", validateApiKey, (req, res) => {
+app.get("/v1/quote", (req, res) => {
   const clientId = req.query.clientId; // Assuming the client sends the clientId as a query parameter
   const categoryIds = req.query.categoryIds; // Assuming the client sends the categoryIds as a query parameter in the format "1,2,3" (comma-separated)
 
