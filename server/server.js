@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const hostname = 'quot.is'
 const cors = require("cors");
 const db = require("./db");
 const app = express();
