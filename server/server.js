@@ -167,7 +167,7 @@ app.get('/categories', (req, res) => {
 
 // Load SSL certificate files
 const privateKey = fs.readFileSync(
-  '/etc/nginx/ssl/quot_private_key.pem',
+  '/etc/nginx/ssl/quot_private_key.key',
   'utf8'
 );
 const certificate = fs.readFileSync(
