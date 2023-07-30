@@ -170,8 +170,8 @@ app.get("/categories", (req, res) => {
 });
 
 const options = {
-  key: fs.readFileSync('/etc/nginx/ssl/quot_private_key'),
-  cert: fs.readFileSync('/etc/nginx/ssl/quot_certificate'),
+  key: fs.readFileSync('/etc/nginx/ssl/quot_private_key.pem'),
+  cert: fs.readFileSync('/etc/nginx/ssl/quot_certificate.pem'),
 };
 
 const server = https.createServer(options, app);
