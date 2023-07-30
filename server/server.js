@@ -1,11 +1,13 @@
-// server.js
-
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const https = require("https");
+const fs = require("fs");
+
+const hostname = 'quot.is';
+const port = 5000;
+
 const db = require("./db");
 const app = express();
-const port = 5000;
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" }); // Load the environment variables from .env
 const apiKey = require("../api-key"); // Import the API key from api-key.js
@@ -22,7 +24,9 @@ const Quote = {
 };
 
 app.use(bodyParser.json());
-app.use(cors());
+
+// Middleware for trusting Cloudflare requests
+app.set('trust proxy', 1);
 
 // Middleware for /v1/ endpoint
 app.use("/v1", (req, res, next) => {
@@ -165,6 +169,12 @@ app.get("/categories", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server is doing something on port ${port}`);
+const options = {
+  key: fs.readFileSync('/etc/nginx/ssl/quot_private_key'),
+  cert: fs.readFileSync('/etc/nginx/ssl/quot_certificate'),
+};
+
+const server = https.createServer(options, app);
+server.listen(port, () => {
+  console.log(`Server is doing something on https://${hostname}:${port}`);
 });
