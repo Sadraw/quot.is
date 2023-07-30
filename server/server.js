@@ -181,5 +181,5 @@ const credentials = { key: privateKey, cert: certificate };
 const httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(port, () => {
-  console.log(`Server is doing something on port ${port}`);
+  console.log(`Server is doing something on port ${port} with HTTPS`);
 });
