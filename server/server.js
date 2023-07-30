@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const https = require("https");
 const fs = require("fs");
 
-const hostname = 'quot.is';
+const hostname = 'https://quot.is';
 const port = 5000;
 
 const db = require("./db");
