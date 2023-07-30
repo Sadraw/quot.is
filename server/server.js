@@ -32,7 +32,7 @@ app.use('/v1', (req, res, next) => {
     return res.status(401).json({ error: 'Invalid API key' });
   }
 
-  res.locals.welcomeMessage = 'Welcome to Version 1 of the quot.is API';
+  res.locals.welcomeMessage = 'Welcome to Version 1 of the api.quot.is API';
   next();
 });
 
@@ -180,6 +180,9 @@ const credentials = { key: privateKey, cert: certificate };
 // Create an HTTPS server
 const httpsServer = https.createServer(credentials, app);
 
+// Change the domain variable to your subdomain name
+const domain = 'api.quot.is';
+
 httpsServer.listen(port, () => {
-  console.log(`Server is doing something on port ${port} with HTTPS`);
+  console.log(`Server is doing something on https://${domain}:${port}/`);
 });
