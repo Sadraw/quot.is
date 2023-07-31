@@ -185,8 +185,7 @@ const credentials = { key: privateKey, cert: certificate };
 // Create an HTTPS server
 const httpsServer = https.createServer(credentials, app);
 
-// Start the server on the specified port
-const port = 5000;
-httpsServer.listen(port, () => {
-  console.log(`Server is doing something on https://api.quot.is:${port}/`);
+// Start the server on the default HTTPS port (443)
+httpsServer.listen(443, () => {
+  console.log("Server is doing something on https://api.quot.is/");
 });
