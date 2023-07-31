@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./db");
 const app = express();
-const port = 5000;
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
 const apiKey = require("../api-key");
@@ -24,9 +23,15 @@ const Quote = {
 app.use(bodyParser.json());
 app.use(cors());
 
-// Middleware for /v1/ endpoint
-app.use("/v1", (req, res, next) => {
+// Middleware for /v1/ endpoint and domain filtering
+app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
+  const requestedDomain = req.hostname;
+
+  // Check if the request is coming from api.quot.is
+  if (requestedDomain !== "api.quot.is") {
+    return res.status(404).json({ error: "Not Found" });
+  }
 
   if (!clientApiKey || clientApiKey !== `Bearer ${apiKey}`) {
     return res.status(401).json({ error: "Invalid API key" });
@@ -180,9 +185,8 @@ const credentials = { key: privateKey, cert: certificate };
 // Create an HTTPS server
 const httpsServer = https.createServer(credentials, app);
 
-// Change the domain variable to your subdomain name
-const domain = "api.quot.is";
-
+// Start the server on the specified port
+const port = 5000;
 httpsServer.listen(port, () => {
-  console.log(`Server is doing something on https://${domain}:${port}/`);
+  console.log(`Server is doing something on https://api.quot.is:${port}/`);
 });
