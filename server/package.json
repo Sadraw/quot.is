@@ -10,6 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "api-key": "^0.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.5.2",
     "quot.is": "^2.0.3"
   }
 }
