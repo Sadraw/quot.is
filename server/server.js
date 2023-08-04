@@ -172,11 +172,11 @@ app.get("/categories", (req, res) => {
 
 // Load SSL certificate files
 const privateKey = fs.readFileSync(
-  "/etc/nginx/ssl/quot_private_key.key",
+  "/etc/letsencrypt/live/api.quot.is/privkey.pem",
   "utf8"
 );
 const certificate = fs.readFileSync(
-  "/etc/nginx/ssl/quot_certificate.pem",
+  "/etc/letsencrypt/live/api.quot.is/fullchain.pem",
   "utf8"
 );
 
@@ -186,6 +186,22 @@ const credentials = { key: privateKey, cert: certificate };
 const httpsServer = https.createServer(credentials, app);
 
 // Start the server on the default HTTPS port (443)
-httpsServer.listen(5000, () => {
+httpsServer.listen(443, () => {
   console.log("Server is doing something on https://api.quot.is/");
 });
+
+
+// Certificate is saved at: /etc/letsencrypt/live/api.quot.is/fullchain.pem
+// Key is saved at:         /etc/letsencrypt/live/api.quot.is/privkey.pem
+
+
+
+// // Load SSL certificate files
+// const privateKey = fs.readFileSync(
+//   "/etc/nginx/ssl/quot_private_key.key",
+//   "utf8"
+// );
+// const certificate = fs.readFileSync(
+//   "/etc/nginx/ssl/quot_certificate.pem",
+//   "utf8"
+// );
