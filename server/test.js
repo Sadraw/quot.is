@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./db");
 const app = express();
-const port = "5000";
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
 const apiKey = require("../api-key");
@@ -24,9 +23,15 @@ const Quote = {
 app.use(bodyParser.json());
 app.use(cors());
 
-// Middleware for /v1/ endpoint
-app.use("/v1", (req, res, next) => {
+// Middleware for /v1/ endpoint and domain filtering
+app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
+  const requestedDomain = req.hostname;
+
+  // Check if the request is coming from api.quot.is
+  if (requestedDomain !== "api.quot.is") {
+    return res.status(404).json({ error: "Not Found" });
+  }
 
   if (!clientApiKey || clientApiKey !== `Bearer ${apiKey}`) {
     return res.status(401).json({ error: "Invalid API key" });
@@ -167,11 +172,11 @@ app.get("/categories", (req, res) => {
 
 // Load SSL certificate files
 const privateKey = fs.readFileSync(
-  "/etc/nginx/ssl/quot_private_key.key",
+  "/etc/letsencrypt/live/api.quot.is/privkey.pem",
   "utf8"
 );
 const certificate = fs.readFileSync(
-  "/etc/nginx/ssl/quot_certificate.pem",
+  "/etc/letsencrypt/live/api.quot.is/fullchain.pem",
   "utf8"
 );
 
@@ -180,9 +185,23 @@ const credentials = { key: privateKey, cert: certificate };
 // Create an HTTPS server
 const httpsServer = https.createServer(credentials, app);
 
-// Change the domain variable to your subdomain name
-const domain = "api.quot.is";
-
-httpsServer.listen(port, () => {
-  console.log(`Server is doing something on https://${domain}:${port}/`);
+// Start the server on the default HTTPS port (443)
+httpsServer.listen(5000, "127.0.0.1", () => {
+  console.log("Server is doing something on https://api.quot.is");
 });
+
+
+// Certificate is saved at: /etc/letsencrypt/live/api.quot.is/fullchain.pem
+// Key is saved at:         /etc/letsencrypt/live/api.quot.is/privkey.pem
+
+
+
+// // Load SSL certificate files
+// const privateKey = fs.readFileSync(
+//   "/etc/nginx/ssl/quot_private_key.key",
+//   "utf8"
+// );
+// const certificate = fs.readFileSync(
+//   "/etc/nginx/ssl/quot_certificate.pem",
+//   "utf8"
+// );
