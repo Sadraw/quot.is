@@ -9,17 +9,6 @@ const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
 const apiKey = require("../api-key");
 
-const Category = {
-  name: String,
-};
-
-const Quote = {
-  quote: String,
-  author: String,
-  imageUrl: String,
-  categoryId: [Category],
-};
-
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -73,7 +62,7 @@ app.get("/v1/quote/:id", (req, res) => {
         quote: quote.quote,
         author: quote.author,
         imageUrl: quote.imageUrl,
-        categories: quote.categoryId, // Assuming the categoryId field holds the list of category IDs
+        categoryId: quote.categoryId,
       };
 
       res.json(response);
@@ -122,37 +111,10 @@ app.get("/v1/quote", (req, res) => {
         quote: randomQuote.quote,
         author: randomQuote.author,
         imageUrl: randomQuote.imageUrl,
-        categories: randomQuote.categoryId,
+        categoryId: randomQuote.categoryId,
       };
 
       res.json(response);
-    }
-  });
-});
-
-// Add a new Quote
-app.post("/quotes", (req, res) => {
-  const { quote, author, imageUrl, categoryId } = req.body;
-
-  // Validate the incoming data
-  if (!quote || !author || !categoryId) {
-    res.status(400).json({ error: "Quote, author, and category are required" });
-    return;
-  }
-
-  // Insert the new quote into the database
-  const sql =
-    "INSERT INTO quotes (quote, author, imageUrl, categoryId) VALUES (?, ?, ?, ?)";
-  const values = [quote, author, imageUrl, categoryId];
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error("Error adding quote:", err);
-      res.status(500).json({ error: "Error adding quote" });
-    } else {
-      res.json({
-        message: "Quote Added Successfully!",
-        quoteId: result.insertId,
-      });
     }
   });
 });
@@ -165,7 +127,10 @@ app.get("/categories", (req, res) => {
       console.error("Error fetching categories:", err);
       res.status(500).json({ error: "Error fetching categories" });
     } else {
-      res.json(result);
+      const categories = result.map((category) => ({
+        name: category.name,
+      }));
+      res.json({ categories });
     }
   });
 });
@@ -189,19 +154,3 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
 });
-
-
-// Certificate is saved at: /etc/letsencrypt/live/api.quot.is/fullchain.pem
-// Key is saved at:         /etc/letsencrypt/live/api.quot.is/privkey.pem
-
-
-
-// // Load SSL certificate files
-// const privateKey = fs.readFileSync(
-//   "/etc/nginx/ssl/quot_private_key.key",
-//   "utf8"
-// );
-// const certificate = fs.readFileSync(
-//   "/etc/nginx/ssl/quot_certificate.pem",
-//   "utf8"
-// );
