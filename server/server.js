@@ -3,15 +3,31 @@ const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./db");
+const db = require("./db"); // Make sure to provide the correct path to your database setup
 const app = express();
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
-const apiKey = require("../api-key");
+const apiKey = require("../api-key"); // Provide the correct path to your API key file
 
 app.use(bodyParser.json());
 app.use(cors());
 
+app.use((req, res, next) => {
+  const clientApiKey = req.header("Authorization");
+  const requestedDomain = req.hostname;
+
+  if (requestedDomain !== "api.quot.is") {
+    return res.status(404).json({ error: "Not Found" });
+  }
+
+  if (!clientApiKey || clientApiKey !== `Bearer ${apiKey}`) {
+    return res.status(401).json({ error: "Invalid API key" });
+  }
+
+  res.locals.welcomeMessage = "Welcome to Version 1 of the api.quot.is API";
+  console.error("Welcome to Version 1 of quot.is API");
+  next();
+});
 
 async function fetchSentQuoteIds(clientId) {
   return new Promise((resolve, reject) => {
@@ -58,73 +74,28 @@ async function recordQuoteSent(quoteId, clientId) {
   });
 }
 
-app.use((req, res, next) => {
-  const clientApiKey = req.header("Authorization");
-  const requestedDomain = req.hostname;
-
-  if (requestedDomain !== "api.quot.is") {
-    return res.status(404).json({ error: "Not Found" });
-  }
-
-  if (!clientApiKey || clientApiKey !== `Bearer ${apiKey}`) {
-    return res.status(401).json({ error: "Invalid API key" });
-  }
-
-  res.locals.welcomeMessage = "Welcome to Version 1 of the api.quot.is API";
-  console.error("Welcome to Version 1 of quot.is API");
-  next();
-});
-
-app.get("/v1/quotes", (req, res) => {
-  const sql = "SELECT * FROM quotes";
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.error("Error fetching quotes:", err);
-      res.status(500).json({ error: "Error fetching quotes" });
-    } else {
-      res.json(result);
-    }
-  });
-});
-
-app.get("/v1/quote/:id", (req, res) => {
-  const id = req.params.id;
-  const sql = "SELECT * FROM quotes WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      console.error("Error fetching quote:", err);
-      res.status(500).json({ error: "Error fetching quote" });
-    } else if (result.length === 0) {
-      res.status(404).json({ error: "Quote not found" });
-    } else {
-      const quote = result[0];
-      const response = {
-        quote: quote.quote,
-        author: quote.author,
-        imageUrl: quote.imageUrl,
-        categoryId: quote.categoryId,
-      };
-      res.json(response);
-    }
-  });
-});
-
-// New endpoint to send random quote while preventing duplicates
 app.get("/v1/quote/random", async (req, res) => {
+  console.log("Random Quote Request Received");
+
   const clientId = req.query.clientId; // User ID
   const categoryIds = req.query.categoryIds; // Comma-separated category IDs
 
   try {
+    console.log("Fetching sent quote IDs...");
     const sentQuoteIds = await fetchSentQuoteIds(clientId);
+    console.log("Fetching unsent quotes...");
     const unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIds);
 
     if (unsentQuotes.length === 0) {
       return res.status(404).json({ error: "No unsent quotes available" });
     }
 
+    console.log("Selecting a random quote...");
     const selectedQuote = getRandomQuote(unsentQuotes);
+    console.log("Recording sent quote...");
     await recordQuoteSent(selectedQuote.id, clientId);
 
+    console.log("Sending response...");
     res.json({
       quote: selectedQuote.quote,
       author: selectedQuote.author,
@@ -136,6 +107,7 @@ app.get("/v1/quote/random", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
 
 app.get("/categories", (req, res) => {
   const sql = "SELECT * FROM categories";
