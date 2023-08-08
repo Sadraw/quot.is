@@ -1,20 +1,24 @@
+// Import required modules
 const fs = require("fs");
 const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./db");
+const db = require("./db"); 
 const app = express();
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
 const apiKey = require("../api-key");
 
+// Configure middleware
 app.use(bodyParser.json());
 app.use(cors());
 
 // Middleware for /v1/ endpoint and domain filtering
 app.use((req, res, next) => {
+  // Get the API key from the request headers
   const clientApiKey = req.header("Authorization");
+  // Get the requested domain
   const requestedDomain = req.hostname;
 
   // Check if the request is coming from api.quot.is
@@ -22,11 +26,14 @@ app.use((req, res, next) => {
     return res.status(404).json({ error: "Not Found" });
   }
 
+  // Check if a valid API key is provided
   if (!clientApiKey || clientApiKey !== `Bearer ${apiKey}`) {
     return res.status(401).json({ error: "Invalid API key" });
   }
 
+  // Set a welcome message for the endpoint
   res.locals.welcomeMessage = "Welcome to Version 1 of the api.quot.is API";
+  console.error("Welcome to Version 1 of quot.is API ")
   next();
 });
 
@@ -70,53 +77,37 @@ app.get("/v1/quote/:id", (req, res) => {
   });
 });
 
-// Fetch a random quote based on client's preferred categories (version 1)
-app.get("/v1/quote", (req, res) => {
-  const clientId = req.query.clientId; // Assuming the client sends the clientId as a query parameter
-  const categoryIds = req.query.categoryIds; // Assuming the client sends the categoryIds as a query parameter in the format "1,2,3" (comma-separated)
+// New endpoint to send random quote while preventing duplicates
+app.get("/v1/quote/random", async (req, res) => {
+  const clientId = req.query.clientId;
 
-  if (!clientId || !categoryIds) {
-    res.status(400).json({
-      error: "clientId and categoryIds are required as query parameters",
-    });
-    return;
-  }
+  try {
+    // Fetch quote IDs sent to the client
+    const sentQuoteIds = await fetchSentQuoteIds(clientId);
 
-  const categoryIdArray = categoryIds.split(",").map((id) => parseInt(id));
-  if (categoryIdArray.some(isNaN)) {
-    res.status(400).json({
-      error:
-        "Invalid categoryIds format. Please provide valid comma-separated category IDs.",
-    });
-    return;
-  }
+    // Fetch unsent quotes based on sent quote IDs
+    const unsentQuotes = await fetchUnsentQuotes(sentQuoteIds);
 
-  // Fetch all quotes that have at least one of the specified categoryIds
-  const sql = "SELECT * FROM quotes WHERE categoryId IN (?)";
-  db.query(sql, [categoryIdArray], (err, result) => {
-    if (err) {
-      console.error("Error fetching quotes:", err);
-      res.status(500).json({ error: "Error fetching quotes" });
-    } else if (result.length === 0) {
-      res
-        .status(404)
-        .json({ error: "No quotes found for the specified categories" });
-    } else {
-      // Randomly select a quote from the fetched quotes
-      const randomIndex = Math.floor(Math.random() * result.length);
-      const randomQuote = result[randomIndex];
-
-      // Create the response object with the required fields
-      const response = {
-        quote: randomQuote.quote,
-        author: randomQuote.author,
-        imageUrl: randomQuote.imageUrl,
-        categoryId: randomQuote.categoryId,
-      };
-
-      res.json(response);
+    if (unsentQuotes.length === 0) {
+      return res.status(404).json({ error: "No unsent quotes available" });
     }
-  });
+
+    // Select a random quote from unsentQuotes
+    const selectedQuote = getRandomQuote(unsentQuotes);
+
+    // Record the selected quote as sent to the client
+    await recordQuoteSent(selectedQuote.id, clientId);
+
+    res.json({
+      quote: selectedQuote.quote,
+      author: selectedQuote.author,
+      imageUrl: selectedQuote.imageUrl,
+      categoryId: selectedQuote.categoryId,
+    });
+  } catch (error) {
+    console.error("Error while fetching and sending a quote:", error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 });
 
 // Fetch all categories
@@ -155,3 +146,54 @@ httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
   console.log(db);
 });
+
+// Placeholder functions -- Implement them as we go forward 
+
+// Fetch quote IDs sent to the client
+async function fetchSentQuoteIds(clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
+    db.query(sql, [clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const sentQuoteIds = result.map((row) => row.quoteId);
+        resolve(sentQuoteIds);
+      }
+    });
+  });
+}
+
+// Fetch unsent quotes based on sent quote IDs
+async function fetchUnsentQuotes(sentQuoteIds) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM quotes WHERE id NOT IN (?)";
+    db.query(sql, [sentQuoteIds], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+// Select a random quote from the provided array
+function getRandomQuote(quotes) {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  return quotes[randomIndex];
+}
+
+// Record that a quote has been sent to a client
+async function recordQuoteSent(quoteId, clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO sent_quotes (quoteId, clientId) VALUES (?, ?)";
+    db.query(sql, [quoteId, clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
