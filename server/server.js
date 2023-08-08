@@ -29,15 +29,32 @@ app.use((req, res, next) => {
   next();
 });
 
-async function fetchSentQuoteIds(clientId) {
+async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
-    db.query(sql, [clientId], (err, result) => {
+    let sql = "SELECT * FROM quotes";
+    const placeholders = [];
+
+    if (sentQuoteIds.length > 0) {
+      placeholders.push('?'.repeat(sentQuoteIds.length));
+      sql += ` WHERE id NOT IN (${placeholders.join(',')})`;
+    }
+
+    if (categoryIds && categoryIds.length > 0) {
+      if (placeholders.length === 0) {
+        sql += " WHERE";
+      } else {
+        sql += " AND";
+      }
+      placeholders.length = 0; // Reset the placeholders array
+      placeholders.push('?'.repeat(categoryIds.length));
+      sql += ` categoryId IN (${placeholders.join(',')})`;
+    }
+
+    db.query(sql, [...sentQuoteIds, ...categoryIds], (err, result) => {
       if (err) {
         reject(err);
       } else {
-        const sentQuoteIds = result.map((row) => row.quoteId);
-        resolve(sentQuoteIds);
+        resolve(result);
       }
     });
   });
