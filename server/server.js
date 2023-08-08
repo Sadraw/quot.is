@@ -29,6 +29,20 @@ app.use((req, res, next) => {
   next();
 });
 
+async function fetchSentQuoteIds(clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
+    db.query(sql, [clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const sentQuoteIds = result.map((row) => row.quoteId);
+        resolve(sentQuoteIds);
+      }
+    });
+  });
+}
+
 async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
   return new Promise((resolve, reject) => {
     let sql = "SELECT * FROM quotes";
@@ -51,19 +65,6 @@ async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
     }
 
     db.query(sql, [...sentQuoteIds, ...categoryIds], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-}
-
-async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
-  return new Promise((resolve, reject) => {
-    const sql = "SELECT * FROM quotes WHERE id NOT IN (?) AND categoryId IN (?)";
-    db.query(sql, [sentQuoteIds, categoryIds], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -125,7 +126,6 @@ app.get("/v1/quote/random", async (req, res) => {
   }
 });
 
-
 app.get("/categories", (req, res) => {
   const sql = "SELECT * FROM categories";
   db.query(sql, (err, result) => {
@@ -157,5 +157,3 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
 });
-
-
