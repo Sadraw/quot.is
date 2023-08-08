@@ -62,6 +62,7 @@ async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
       placeholders.length = 0; // Reset the placeholders array
       placeholders.push('?'.repeat(categoryIds.length));
       sql += ` categoryId IN (${placeholders.join(',')})`;
+      
     }
 
     db.query(sql, [...sentQuoteIds, ...categoryIds], (err, result) => {
