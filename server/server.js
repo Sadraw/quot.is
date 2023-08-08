@@ -101,8 +101,14 @@ app.get("/v1/quote/random", async (req, res) => {
   try {
     console.log("Fetching sent quote IDs...");
     const sentQuoteIds = await fetchSentQuoteIds(clientId);
+    
     console.log("Fetching unsent quotes...");
-    const unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIds);
+    let unsentQuotes;
+    if (categoryIds) {
+      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIds.split(','));
+    } else {
+      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, []);
+    }
 
     if (unsentQuotes.length === 0) {
       return res.status(404).json({ error: "No unsent quotes available" });
