@@ -12,6 +12,52 @@ const apiKey = require("../api-key");
 app.use(bodyParser.json());
 app.use(cors());
 
+
+async function fetchSentQuoteIds(clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
+    db.query(sql, [clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const sentQuoteIds = result.map((row) => row.quoteId);
+        resolve(sentQuoteIds);
+      }
+    });
+  });
+}
+
+async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM quotes WHERE id NOT IN (?) AND categoryId IN (?)";
+    db.query(sql, [sentQuoteIds, categoryIds], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function getRandomQuote(quotes) {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  return quotes[randomIndex];
+}
+
+async function recordQuoteSent(quoteId, clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO sent_quotes (quoteId, clientId) VALUES (?, ?)";
+    db.query(sql, [quoteId, clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
   const requestedDomain = req.hostname;
@@ -123,47 +169,4 @@ httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
 });
 
-async function fetchSentQuoteIds(clientId) {
-  return new Promise((resolve, reject) => {
-    const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
-    db.query(sql, [clientId], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        const sentQuoteIds = result.map((row) => row.quoteId);
-        resolve(sentQuoteIds);
-      }
-    });
-  });
-}
 
-async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
-  return new Promise((resolve, reject) => {
-    const sql = "SELECT * FROM quotes WHERE id NOT IN (?) AND categoryId IN (?)";
-    db.query(sql, [sentQuoteIds, categoryIds], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-}
-
-function getRandomQuote(quotes) {
-  const randomIndex = Math.floor(Math.random() * quotes.length);
-  return quotes[randomIndex];
-}
-
-async function recordQuoteSent(quoteId, clientId) {
-  return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO sent_quotes (quoteId, clientId) VALUES (?, ?)";
-    db.query(sql, [quoteId, clientId], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
