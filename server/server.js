@@ -79,14 +79,15 @@ app.get("/v1/quote/:id", (req, res) => {
 
 // New endpoint to send random quote while preventing duplicates
 app.get("/v1/quote/random", async (req, res) => {
-  const clientId = req.query.clientId;
+  const clientId = req.query.clientId; // User ID
+  const categoryIds = req.query.categoryIds; // Comma-separated category IDs
 
   try {
-    // Fetch quote IDs sent to the client
+    // Fetch sent quote IDs for the user
     const sentQuoteIds = await fetchSentQuoteIds(clientId);
 
-    // Fetch unsent quotes based on sent quote IDs
-    const unsentQuotes = await fetchUnsentQuotes(sentQuoteIds);
+    // Fetch unsent quotes from the chosen categories
+    const unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIds);
 
     if (unsentQuotes.length === 0) {
       return res.status(404).json({ error: "No unsent quotes available" });
@@ -95,7 +96,7 @@ app.get("/v1/quote/random", async (req, res) => {
     // Select a random quote from unsentQuotes
     const selectedQuote = getRandomQuote(unsentQuotes);
 
-    // Record the selected quote as sent to the client
+    // Record the selected quote as sent to the user
     await recordQuoteSent(selectedQuote.id, clientId);
 
     res.json({
@@ -109,6 +110,7 @@ app.get("/v1/quote/random", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
 
 // Fetch all categories
 app.get("/categories", (req, res) => {
