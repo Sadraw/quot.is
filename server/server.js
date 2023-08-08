@@ -101,11 +101,13 @@ app.get("/v1/quote/random", async (req, res) => {
   try {
     console.log("Fetching sent quote IDs...");
     const sentQuoteIds = await fetchSentQuoteIds(clientId);
-    
+
     console.log("Fetching unsent quotes...");
     let unsentQuotes;
     if (categoryIds) {
-      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIds.split(','));
+      const categoryIdsArray = categoryIds.split(',');
+      console.log("Category IDs:", categoryIdsArray);
+      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIdsArray);
     } else {
       unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, []);
     }
