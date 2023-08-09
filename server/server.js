@@ -9,9 +9,7 @@ const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
 const apiKey = require("../api-key"); // Path to API KEY
 
-app.use(bodyParser.json());
-app.use(cors());
-
+// Middleware to validate API key and requested domain
 app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
   const requestedDomain = req.hostname;
@@ -28,6 +26,9 @@ app.use((req, res, next) => {
   console.error("Welcome to Version 1 of quot.is API");
   next();
 });
+
+app.use(bodyParser.json());
+app.use(cors());
 
 // Saving client-id
 
@@ -169,6 +170,15 @@ app.get("/categories", (req, res) => {
       }));
       res.json({ categories });
     }
+  });
+});
+
+// Central Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error for debugging
+
+  res.status(500).json({
+    error: "Internal Server Error",
   });
 });
 
