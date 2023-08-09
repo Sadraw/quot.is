@@ -32,6 +32,9 @@ app.use((req, res, next) => {
 // Saving client-id
 
 async function saveClientId(clientId) {
+  if (!clientId) {
+    return; // Skip saving the clientId if it is not provided 
+  }
   return new Promise((resolve, reject) => {
     const sql = "INSERT INTO client_ids (clientId) VALUES (?)"; // Column name
     db.query(sql, [clientId], (err, result) => {
