@@ -33,6 +33,7 @@ app.use((req, res, next) => {
 
 async function saveClientId(clientId) {
   if (!clientId) {
+    console.log("ClientId not provided. Skipping database insertion.");
     return; // Skip saving the clientId if it is not provided 
   }
   return new Promise((resolve, reject) => {
@@ -41,6 +42,7 @@ async function saveClientId(clientId) {
       if (err) {
         reject(err);
       } else {
+        console.log("ClientId saved in the database.");
         resolve();
       }
     });
