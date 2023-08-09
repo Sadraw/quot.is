@@ -3,11 +3,11 @@ const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./db"); // Make sure to provide the correct path to your database setup
+const db = require("./db"); // DATABASE
 const app = express();
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
-const apiKey = require("../api-key"); // Provide the correct path to your API key file
+const apiKey = require("../api-key"); // Path to API KEY
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -29,6 +29,21 @@ app.use((req, res, next) => {
   next();
 });
 
+// Saving client-id
+
+async function saveClientId(clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO client_ids (clientId) VALUES (?)"; // Column name
+    db.query(sql, [clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 async function fetchSentQuoteIds(clientId) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
@@ -49,8 +64,8 @@ async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
     const placeholders = [];
 
     if (sentQuoteIds.length > 0) {
-      placeholders.push('?'.repeat(sentQuoteIds.length));
-      sql += ` WHERE id NOT IN (${placeholders.join(',')})`;
+      placeholders.push("?".repeat(sentQuoteIds.length));
+      sql += ` WHERE id NOT IN (${placeholders.join(",")})`;
     }
 
     if (categoryIds && categoryIds.length > 0) {
@@ -60,9 +75,8 @@ async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
         sql += " AND";
       }
       placeholders.length = 0; // Reset the placeholders array
-      placeholders.push('?'.repeat(categoryIds.length));
-      sql += ` categoryId IN (${placeholders.join(',')})`;
-      
+      placeholders.push("?".repeat(categoryIds.length));
+      sql += ` categoryId IN (${placeholders.join(",")})`;
     }
 
     db.query(sql, [...sentQuoteIds, ...categoryIds], (err, result) => {
@@ -106,7 +120,7 @@ app.get("/v1/quote/random", async (req, res) => {
     console.log("Fetching unsent quotes...");
     let unsentQuotes;
     if (categoryIds) {
-      const categoryIdsArray = categoryIds.split(',');
+      const categoryIdsArray = categoryIds.split(",");
       console.log("Category IDs:", categoryIdsArray);
       unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIdsArray);
     } else {
@@ -121,6 +135,9 @@ app.get("/v1/quote/random", async (req, res) => {
     const selectedQuote = getRandomQuote(unsentQuotes);
     console.log("Recording sent quote...");
     await recordQuoteSent(selectedQuote.id, clientId);
+
+    // Save clientId in the database
+    await saveClientId(clientId);
 
     console.log("Sending response...");
     res.json({
