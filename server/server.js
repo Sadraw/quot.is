@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 async function saveClientId(clientId) {
   if (!clientId) {
     console.log("ClientId not provided. Skipping database insertion.");
-    return; // Skip saving the clientId if it is not provided 
+    return; // Skip saving the clientId if it is not provided
   }
   return new Promise((resolve, reject) => {
     const sql = "INSERT INTO client_ids (clientId) VALUES (?)"; // Column name
@@ -84,7 +84,7 @@ async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
       sql += ` categoryId IN (${placeholders.join(",")})`;
     }
 
-    db.query(sql, [...sentQuoteIds, ...categoryIds], (err, result) => {
+    db.query(sql, [sentQuoteIds, ...categoryIds], (err, result) => {
       if (err) {
         reject(err);
       } else {
