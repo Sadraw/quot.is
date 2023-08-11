@@ -155,12 +155,15 @@ app.get("/v1/quote/random", async (req, res) => {
 
     await saveClientId(clientId);
 
+    // Fetch category names based on categoryIds
+    const categoryNames = await fetchCategoryNames(selectedQuote.categoryId.split(","));
+
     console.log("Sending response...");
     res.json({
       quote: selectedQuote.quote,
       author: selectedQuote.author,
       imageUrl: selectedQuote.imageUrl,
-      categories: await fetchCategoryNames(selectedQuote.categoryId.split(",")),
+      categoryNames: categoryNames,
     });
   } catch (error) {
     console.error("Error while fetching and sending a quote:", error);
