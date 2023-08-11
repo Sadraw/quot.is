@@ -3,21 +3,17 @@ const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./db");
+const db = require("./db"); // DATABASE
 const app = express();
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
-const apiKey = require("../api-key");
+const apiKey = require("../api-key"); // Path to API KEY
 
-app.use(bodyParser.json());
-app.use(cors());
-
-// Middleware for /v1/ endpoint and domain filtering
+// Middleware to validate API key and requested domain
 app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
   const requestedDomain = req.hostname;
 
-  // Check if the request is coming from api.quot.is
   if (requestedDomain !== "api.quot.is") {
     return res.status(404).json({ error: "Not Found" });
   }
@@ -27,115 +23,178 @@ app.use((req, res, next) => {
   }
 
   res.locals.welcomeMessage = "Welcome to Version 1 of the api.quot.is API";
+  console.error("Welcome to Version 1 of quot.is API");
   next();
 });
 
-// Fetching all quotes (version 1)
-app.get("/v1/quotes", (req, res) => {
-  const sql = "SELECT * FROM quotes";
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.error("Error fetching quotes:", err);
-      res.status(500).json({ error: "Error fetching quotes" });
-    } else {
-      res.json(result);
-    }
-  });
-});
+app.use(bodyParser.json());
+app.use(cors());
 
-// Fetch a single quote by ID (version 1)
-app.get("/v1/quote/:id", (req, res) => {
-  const id = req.params.id;
-  const sql = "SELECT * FROM quotes WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      console.error("Error fetching quote:", err);
-      res.status(500).json({ error: "Error fetching quote" });
-    } else if (result.length === 0) {
-      res.status(404).json({ error: "Quote not found" });
-    } else {
-      // Assuming the result is a single quote object from the database
-      const quote = result[0];
+// Saving client-id
 
-      // Create the response object with the required fields
-      const response = {
-        quote: quote.quote,
-        author: quote.author,
-        imageUrl: quote.imageUrl,
-        categoryId: quote.categoryId,
-      };
-
-      res.json(response);
-    }
-  });
-});
-
-// Fetch a random quote based on client's preferred categories (version 1)
-app.get("/v1/quote", (req, res) => {
-  const clientId = req.query.clientId; // Assuming the client sends the clientId as a query parameter
-  const categoryIds = req.query.categoryIds; // Assuming the client sends the categoryIds as a query parameter in the format "1,2,3" (comma-separated)
-
-  if (!clientId || !categoryIds) {
-    res.status(400).json({
-      error: "clientId and categoryIds are required as query parameters",
-    });
-    return;
+async function saveClientId(clientId) {
+  if (!clientId) {
+    console.log("ClientId not provided. Skipping database insertion.");
+    return; // Skip saving the clientId if it is not provided
   }
-
-  const categoryIdArray = categoryIds.split(",").map((id) => parseInt(id));
-  if (categoryIdArray.some(isNaN)) {
-    res.status(400).json({
-      error:
-        "Invalid categoryIds format. Please provide valid comma-separated category IDs.",
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO client_ids (clientId) VALUES (?)"; // Column name
+    db.query(sql, [clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log("ClientId saved in the database.");
+        resolve();
+      }
     });
-    return;
-  }
-
-  // Fetch all quotes that have at least one of the specified categoryIds
-  const sql = "SELECT * FROM quotes WHERE categoryId IN (?)";
-  db.query(sql, [categoryIdArray], (err, result) => {
-    if (err) {
-      console.error("Error fetching quotes:", err);
-      res.status(500).json({ error: "Error fetching quotes" });
-    } else if (result.length === 0) {
-      res
-        .status(404)
-        .json({ error: "No quotes found for the specified categories" });
-    } else {
-      // Randomly select a quote from the fetched quotes
-      const randomIndex = Math.floor(Math.random() * result.length);
-      const randomQuote = result[randomIndex];
-
-      // Create the response object with the required fields
-      const response = {
-        quote: randomQuote.quote,
-        author: randomQuote.author,
-        imageUrl: randomQuote.imageUrl,
-        categoryId: randomQuote.categoryId,
-      };
-
-      res.json(response);
-    }
   });
+}
+
+async function fetchSentQuoteIds(clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
+    db.query(sql, [clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const sentQuoteIds = result.map((row) => row.quoteId);
+        resolve(sentQuoteIds);
+      }
+    });
+  });
+}
+
+async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
+  return new Promise((resolve, reject) => {
+    let sql = "SELECT * FROM quotes";
+    const placeholders = [];
+
+    if (sentQuoteIds.length > 0) {
+      placeholders.push("?".repeat(sentQuoteIds.length));
+      sql += ` WHERE id NOT IN (${placeholders.join(",")})`;
+    }
+
+    if (categoryIds && categoryIds.length > 0) {
+      if (placeholders.length === 0) {
+        sql += " WHERE";
+      } else {
+        sql += " AND";
+      }
+      placeholders.length = 0; // Reset the placeholders array
+      placeholders.push("?".repeat(categoryIds.length));
+      sql += ` categoryId IN (${placeholders.join(",")})`;
+    }
+
+    db.query(sql, [sentQuoteIds, ...categoryIds], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function getRandomQuote(quotes) {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  return quotes[randomIndex];
+}
+
+async function recordQuoteSent(quoteId, clientId) {
+  return new Promise((resolve, reject) => {
+    const sql = "INSERT INTO sent_quotes (quoteId, clientId) VALUES (?, ?)";
+    db.query(sql, [quoteId, clientId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+async function fetchCategoryNames(categoryIds) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT name FROM categories WHERE id IN (?)";
+    db.query(sql, [categoryIds], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const categoryNames = result.map((category) => category.name);
+        resolve(categoryNames);
+      }
+    });
+  });
+}
+
+app.get("/v1/quote/random", async (req, res) => {
+  console.log("Random Quote Request Received");
+
+  const clientId = req.query.clientId; // User ID
+  const categoryIds = req.query.categoryIds; // Comma-separated category IDs
+
+  try {
+    console.log("Fetching sent quote IDs...");
+    const sentQuoteIds = await fetchSentQuoteIds(clientId);
+
+    console.log("Fetching unsent quotes...");
+    let unsentQuotes;
+    if (categoryIds) {
+      const categoryIdsArray = categoryIds.split(",");
+      console.log("Category IDs:", categoryIdsArray);
+      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIdsArray);
+    } else {
+      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, []);
+    }
+
+    if (unsentQuotes.length === 0) {
+      return res.status(404).json({ error: "No unsent quotes available" });
+    }
+
+    console.log("Selecting a random quote...");
+    const selectedQuote = getRandomQuote(unsentQuotes);
+    console.log("Recording sent quote...");
+    await recordQuoteSent(selectedQuote.id, clientId);
+
+    // Save clientId in the database
+    await saveClientId(clientId);
+
+    console.log("Sending response...");
+    res.json({
+      quote: selectedQuote.quote,
+      author: selectedQuote.author,
+      imageUrl: selectedQuote.imageUrl,
+      categoryId: selectedQuote.categoryId,
+    });
+  } catch (error) {
+    console.error("Error while fetching and sending a quote:", error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 });
 
-// Fetch all categories
 app.get("/categories", (req, res) => {
-  const sql = "SELECT * FROM categories";
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.error("Error fetching categories:", err);
-      res.status(500).json({ error: "Error fetching categories" });
-    } else {
-      const categories = result.map((category) => ({
-        name: category.name,
-      }));
-      res.json({ categories });
-    }
+const sql = "SELECT * FROM categories";
+db.query(sql, (err, result) => {
+  if (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).json({ error: "Error fetching categories" });
+  } else {
+    const categories = result.map((category) => ({
+      name: category.name,
+    }));
+    res.json({ categories });
+  }
+});
+});
+
+// Central Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error for debugging
+
+  res.status(500).json({
+    error: "Internal Server Error",
   });
 });
 
-// Load SSL certificate files
 const privateKey = fs.readFileSync(
   "/etc/letsencrypt/live/api.quot.is/privkey.pem",
   "utf8"
@@ -147,11 +206,8 @@ const certificate = fs.readFileSync(
 
 const credentials = { key: privateKey, cert: certificate };
 
-// Create an HTTPS server
 const httpsServer = https.createServer(credentials, app);
 
-// Start the server on the default HTTPS port (443)
 httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
-  console.log(db);
 });
