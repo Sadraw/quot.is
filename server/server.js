@@ -211,3 +211,10 @@ httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
 });
 //using tmux
+
+
+//Uncaught Exception Handler 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // Optionally, you can perform cleanup or take other actions here.
+});
