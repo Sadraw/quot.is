@@ -22,7 +22,6 @@ app.use((req, res, next) => {
   }
 
   res.locals.welcomeMessage = "Welcome to Version 1 of the api.quot.is API";
-  console.error("Welcome to Version 1 of quot.is API");
   next();
 });
 
