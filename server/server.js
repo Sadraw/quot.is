@@ -22,6 +22,7 @@ app.use((req, res, next) => {
   }
 
   res.locals.welcomeMessage = "Welcome to Version 1 of the api.quot.is API";
+  console.error("Welcome to Version 1 of quot.is API");
   next();
 });
 
@@ -133,8 +134,6 @@ app.get("/v1/quote/random", async (req, res) => {
     console.log("Fetching sent quote IDs...");
     const sentQuoteIds = await fetchSentQuoteIds(clientId);
 
-    console.log("Fetched sent quote IDs:", sentQuoteIds);
-
     console.log("Fetching unsent quotes...");
     let unsentQuotes;
     if (categoryIds) {
@@ -151,17 +150,13 @@ app.get("/v1/quote/random", async (req, res) => {
 
     console.log("Selecting a random quote...");
     const selectedQuote = getRandomQuote(unsentQuotes);
-    console.log("Selected quote:", selectedQuote);
-
     console.log("Recording sent quote...");
     await recordQuoteSent(selectedQuote.id, clientId);
 
-    console.log("ClientId saved:", clientId);
+    await saveClientId(clientId);
 
     // Fetch category names based on categoryIds
-    const categoryNames = await fetchCategoryNames(
-      selectedQuote.categoryId.split(",")
-    );
+    const categoryNames = await fetchCategoryNames(selectedQuote.categoryId.split(","));
 
     console.log("Sending response...");
     res.json({
@@ -217,8 +212,9 @@ httpsServer.listen(5000, "127.0.0.1", () => {
 });
 //using tmux
 
-//Uncaught Exception Handler
-process.on("uncaughtException", (err) => {
-  console.error("Uncaught Exception:", err);
+
+//Uncaught Exception Handler 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
   // Optionally, you can perform cleanup or take other actions here.
 });
