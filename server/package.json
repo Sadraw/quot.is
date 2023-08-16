@@ -1,14 +1,14 @@
 {
   "name": "quot.is",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "pm2 start ecosystem.config.js --env production",
     "dev": "nodemon server.js"
   },
-  "author": "",
+  "author": "Sadra Daneshmand",
   "license": "ISC",
   "dependencies": {
     "api-key": "^0.0.0",
@@ -21,6 +21,7 @@
     "quot.is": "^2.0.7"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "pm2": "^5.1.0"
   }
 }
