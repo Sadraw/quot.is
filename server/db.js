@@ -21,6 +21,9 @@ const gracefulShutdown = () => {
   pool.end().then(() => {
     console.log("Database connections closed.");
     process.exit(0); // Exit with a success status
+    // Perform any cleanup tasks you want, such as logging or saving state.
+    // You can also close any resources that need to be explicitly closed.
+    // You don't have to close the database connections here.
   });
 };
 
