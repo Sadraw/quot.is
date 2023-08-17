@@ -215,7 +215,7 @@ const httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
-  heapdumpModule.captureHeapSnapshot("snapshot_after_init.heapsnapshot");
+  // heapdumpModule.captureHeapSnapshot("snapshot_after_init.heapsnapshot");
 });
 
 // Uncaught Exception Handler
