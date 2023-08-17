@@ -8,8 +8,8 @@ const app = express();
 const mysql = require("mysql");
 require("dotenv").config({ path: "../mysql.env" });
 const apiKey = require("../api-key"); // Path to API KEY
+const heapdumpModule = require('./snapshots/heapdumpModule'); // Adjust the path as needed
 
-// Middleware to validate API key and requested domain
 app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
   const requestedDomain = req.hostname;
@@ -23,22 +23,19 @@ app.use((req, res, next) => {
   }
 
   res.locals.welcomeMessage = "Welcome to Version 1 of the api.quot.is API";
-  console.error("Welcome to Version 1 of quot.is API");
   next();
 });
 
 app.use(bodyParser.json());
 app.use(cors());
 
-// Saving client-id
-
 async function saveClientId(clientId) {
   if (!clientId) {
     console.log("ClientId not provided. Skipping database insertion.");
-    return; // Skip saving the clientId if it is not provided
+    return;
   }
   return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO client_ids (clientId) VALUES (?)"; // Column name
+    const sql = "INSERT INTO client_ids (clientId) VALUES (?)";
     db.query(sql, [clientId], (err, result) => {
       if (err) {
         reject(err);
@@ -80,7 +77,7 @@ async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
       } else {
         sql += " AND";
       }
-      placeholders.length = 0; // Reset the placeholders array
+      placeholders.length = 0;
       placeholders.push("?".repeat(categoryIds.length));
       sql += ` categoryId IN (${placeholders.join(",")})`;
     }
@@ -112,6 +109,7 @@ async function recordQuoteSent(quoteId, clientId) {
     });
   });
 }
+
 async function fetchCategoryNames(categoryIds) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT name FROM categories WHERE id IN (?)";
@@ -129,8 +127,8 @@ async function fetchCategoryNames(categoryIds) {
 app.get("/v1/quote/random", async (req, res) => {
   console.log("Random Quote Request Received");
 
-  const clientId = req.query.clientId; // User ID
-  const categoryIds = req.query.categoryIds; // Comma-separated category IDs
+  const clientId = req.query.clientId;
+  const categoryIds = req.query.categoryIds;
 
   try {
     console.log("Fetching sent quote IDs...");
@@ -155,15 +153,17 @@ app.get("/v1/quote/random", async (req, res) => {
     console.log("Recording sent quote...");
     await recordQuoteSent(selectedQuote.id, clientId);
 
-    // Save clientId in the database
     await saveClientId(clientId);
+
+    // Fetch category names based on categoryIds
+    const categoryNames = await fetchCategoryNames(selectedQuote.categoryId.split(","));
 
     console.log("Sending response...");
     res.json({
       quote: selectedQuote.quote,
       author: selectedQuote.author,
       imageUrl: selectedQuote.imageUrl,
-      categoryId: selectedQuote.categoryId,
+      categoryNames: categoryNames,
     });
   } catch (error) {
     console.error("Error while fetching and sending a quote:", error);
@@ -172,23 +172,22 @@ app.get("/v1/quote/random", async (req, res) => {
 });
 
 app.get("/categories", (req, res) => {
-const sql = "SELECT * FROM categories";
-db.query(sql, (err, result) => {
-  if (err) {
-    console.error("Error fetching categories:", err);
-    res.status(500).json({ error: "Error fetching categories" });
-  } else {
-    const categories = result.map((category) => ({
-      name: category.name,
-    }));
-    res.json({ categories });
-  }
-});
+  const sql = "SELECT * FROM categories";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Error fetching categories:", err);
+      res.status(500).json({ error: "Error fetching categories" });
+    } else {
+      const categories = result.map((category) => ({
+        name: category.name,
+      }));
+      res.json({ categories });
+    }
+  });
 });
 
-// Central Error Handling Middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Log the error for debugging
+  console.error(err.stack);
 
   res.status(500).json({
     error: "Internal Server Error",
@@ -210,7 +209,13 @@ const httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(5000, "127.0.0.1", () => {
   console.log("Server is doing something on https://api.quot.is");
+  heapdumpModule.captureHeapSnapshot('snapshot_after_init.heapsnapshot');
 });
+//using tmux
 
 
-//20 pages 
+//Uncaught Exception Handler 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // Optionally, you can perform cleanup or take other actions here.
+});
