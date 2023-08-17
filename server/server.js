@@ -54,7 +54,7 @@ async function saveClientId(clientId) {
 async function fetchSentQuoteIds(clientId) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
-    db.query(sql, [clientId], (err, result) => {
+    dbPool.query(sql, [clientId], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -86,7 +86,7 @@ async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
       sql += ` categoryId IN (${placeholders.join(",")})`;
     }
 
-    db.query(sql, [sentQuoteIds, ...categoryIds], (err, result) => {
+    dbPool.query(sql, [sentQuoteIds, ...categoryIds], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -104,7 +104,7 @@ function getRandomQuote(quotes) {
 async function recordQuoteSent(quoteId, clientId) {
   return new Promise((resolve, reject) => {
     const sql = "INSERT INTO sent_quotes (quoteId, clientId) VALUES (?, ?)";
-    db.query(sql, [quoteId, clientId], (err, result) => {
+    dbPool.query(sql, [quoteId, clientId], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -117,7 +117,7 @@ async function recordQuoteSent(quoteId, clientId) {
 async function fetchCategoryNames(categoryIds) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT name FROM categories WHERE id IN (?)";
-    db.query(sql, [categoryIds], (err, result) => {
+    dbPool.query(sql, [categoryIds], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -179,7 +179,7 @@ app.get("/v1/quote/random", async (req, res) => {
 });
 app.get("/categories", (req, res) => {
   const sql = "SELECT * FROM categories";
-  db.query(sql, (err, result) => {
+  dbPool.query(sql, (err, result) => {
     if (err) {
       console.error("Error fetching categories:", err);
       res.status(500).json({ error: "Error fetching categories" });
