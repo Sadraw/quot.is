@@ -25,3 +25,5 @@ yarn-error.log*
 .mysql.env
 mysql.env
 api-key.js
+api.env
+api.env.local
