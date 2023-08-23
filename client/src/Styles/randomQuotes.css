@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo&family=Victor+Mono:ital,wght@0,100;0,200;0,300;1,100;1,200&display=swap');
+
+.random-quote-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+    font-size: 20px;
+
+}
+
+h2{
+    color: #1f8181;
+    font-size:53px;
+    font-family: 'Victor Mono', monospace;
+    box-sizing: border-box; /* Include padding in width calculation */
+    animation: background-animation 3s ease-in infinite alternate, expand-header 2.5s cubic-bezier(0.5, 0, 0.5, 1) backwards ;
+
+}
+.author-info {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.author-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+
+
+/* KeyFrame */
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 25%;
+    }
+}
+
+@keyframes blink-caret {
+    from, 
+    to {
+        border-color: transparent;
+    }
+    50% {
+        border-color: #325252;
+    }
+}
+
+@keyframes background-animation {
+    from {
+        background-color: #8f8d8d;
+    }
+    to {
+        background-color: #c0c0c2b9;
+    }
+}
+
+
+@keyframes expand-header {
+    0% {
+        width: 20%;
+    }
+    100% {
+        width: 100%;
+    }
+}
