@@ -11,7 +11,9 @@ const RandomQuote = () => {
     // Fetch random quote from the backend
     axios
       .get("https://api.quot.is/v1/quote/random", {
-        headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
+        headers: {
+          Authorization: process.env.REACT_APP_API_KEY,
+        },
       })
       .then((response) => {
         const { quote, author, avatar } = response.data;
