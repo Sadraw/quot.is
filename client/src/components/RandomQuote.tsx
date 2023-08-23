@@ -14,11 +14,7 @@ const RandomQuote = () => {
         headers: { "X-API-Key": process.env.REACT_APP_API_KEY },
       })
       .then((response) => {
-        console.log("API Response:", response.data); // Log the entire API response
         const { quote, author, avatar } = response.data;
-        console.log("Quote:", quote); // Log the quote
-        console.log("Author:", author); // Log the author
-        console.log("Avatar:", avatar); // Log the avatar
         setQuote(quote);
         setAuthor(author);
         setAvatar(avatar);
@@ -31,7 +27,6 @@ const RandomQuote = () => {
   console.log("Quote State:", quote); // Log the current quote state
   console.log("Author State:", author); // Log the current author state
   console.log("Avatar State:", avatar); // Log the current avatar state
-
   return (
     <div className="random-quote-container">
       <h2>Your Daily Dose of Wisdom!</h2>
