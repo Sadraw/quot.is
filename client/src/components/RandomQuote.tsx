@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../Styles/randomQuotes.css";
+import dotenv from "dotenv";
+dotenv.config(); // Load the environment variables
 
 const RandomQuote = () => {
   const [quote, setQuote] = useState<string>("");
