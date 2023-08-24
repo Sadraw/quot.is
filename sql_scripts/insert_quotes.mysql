@@ -1,0 +1,9 @@
+-- Insert Quotes
+INSERT INTO quotes (quote, author, imageUrl, categoryId)
+VALUES
+  ('Happiness is not something ready-made. It comes from your own actions.', 'Dalai Lama', 'https://example.com/image6.jpg', 4),
+  ('The only way to do great work is to love what you do.', 'Steve Jobs', NULL, 4),
+  -- Add more quotes for different categories
+  -- ...
+  ('The only thing necessary for the triumph of evil is for good men to do nothing.', 'Edmund Burke', 'https://example.com/image15.jpg', 7);
+
