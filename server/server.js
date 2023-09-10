@@ -128,7 +128,7 @@ async function fetchCategoryNames(categoryIds) {
   });
 }
 // Example route that uses the connection pool
-app.get("/v1/quote/random", async (req, res) => {
+app.get("/v1/quote", async (req, res) => {
   console.log("Random Quote Request Received");
 
   const clientId = req.query.clientId;
@@ -158,17 +158,18 @@ app.get("/v1/quote/random", async (req, res) => {
     console.log("Recording sent quote...");
     await recordQuoteSent(selectedQuote.id, clientId);
 
+
     await saveClientId(clientId);
 
     // Fetch category names based on categoryIds
-    const categoryNames = await fetchCategoryNames(
-      selectedQuote.categoryId.split(",")
-    );
+    const categoryIdsArray = selectedQuote.categoryId.split(",");
+    const categoryNames = await fetchCategoryNames(categoryIdsArray);
+
 
     console.log("Sending response...");
     res.json({
-      quote: selectedQuote.quote,
-      author: selectedQuote.author,
+      quote: selectedQuote.text,
+      author: selectedQuote.authorId,
       imageUrl: selectedQuote.imageUrl,
       categoryNames: categoryNames,
     });
@@ -178,16 +179,14 @@ app.get("/v1/quote/random", async (req, res) => {
   }
 });
 app.get("/categories", (req, res) => {
-  const sql = "SELECT * FROM categories";
+  const sql = "SELECT name FROM categories";  // only names were selected 
   dbPool.query(sql, (err, result) => {
     if (err) {
       console.error("Error fetching categories:", err);
       res.status(500).json({ error: "Error fetching categories" });
     } else {
-      const categories = result.map((category) => ({
-        name: category.name,
-      }));
-      res.json({ categories });
+      const categoryNames = result.map((category) => category.name);
+      res.json(categoryNames); // Send category names as a list of strings * 
     }
   });
 });
