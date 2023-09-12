@@ -158,7 +158,8 @@ app.get("/v1/quote", async (req, res) => {
     const authorId = selectedQuote.authorId;
     const authorName = await fetchAuthorName(authorId);
 
-    const categoryNames = unsentQuotes.map((quote) => quote.categoryName);
+    const categoryIdsForSelectedQuote = [selectedQuote.categoryId]; // Fetch category for selected quote only
+    const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
 
     console.log("Sending response...");
     res.json({
@@ -172,6 +173,7 @@ app.get("/v1/quote", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
 
 app.get("/categories", (req, res) => {
   const sql = "SELECT name FROM categories";
