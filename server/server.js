@@ -156,8 +156,9 @@ app.get("/v1/quote", async (req, res) => {
     const selectedQuote = getRandomQuote(unsentQuotes);
 
     const authorId = selectedQuote.authorId;
-    const authorName = await fetchAuthorName(authorId);
-
+    // const authorName = await fetchAuthorName(authorId);
+    const authorName = selectedQuote.author; // Use the author name from the selected quote
+    
     const categoryIdsForSelectedQuote = [selectedQuote.categoryId]; // Fetch category for selected quote only
     const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
 
