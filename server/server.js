@@ -34,23 +34,23 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Async function to save client ID
-async function saveClientId(clientId) {
-  if (!clientId) {
-    console.log("ClientId not provided. Skipping database insertion.");
-    return;
-  }
-  return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO client_ids (clientId) VALUES (?)";
-    dbPool.query(sql, [clientId], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        console.log("ClientId saved in the database.");
-        resolve();
-      }
-    });
-  });
-}
+// async function saveClientId(clientId) {
+//   if (!clientId) {
+//     console.log("ClientId not provided. Skipping database insertion.");
+//     return;
+//   }
+//   return new Promise((resolve, reject) => {
+//     const sql = "INSERT INTO client_ids (clientId) VALUES (?)";
+//     dbPool.query(sql, [clientId], (err, result) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         console.log("ClientId saved in the database.");
+//         resolve();
+//       }
+//     });
+//   });
+// }
 async function fetchSentQuoteIds(clientId) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
@@ -101,10 +101,10 @@ function getRandomQuote(quotes) {
   return quotes[randomIndex];
 }
 
-async function recordQuoteSent(quoteId, clientId) {
+async function recordQuoteSent(quoteId) {      // clientId can be added here 
   return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO sent_quotes (quoteId, clientId) VALUES (?, ?)";
-    dbPool.query(sql, [quoteId, clientId], (err, result) => {
+    const sql = "INSERT INTO sent_quotes (quoteId) VALUES (?)";
+    dbPool.query(sql, [quoteId], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -156,10 +156,11 @@ app.get("/v1/quote", async (req, res) => {
     console.log("Selecting a random quote...");
     const selectedQuote = getRandomQuote(unsentQuotes);
     console.log("Recording sent quote...");
-    await recordQuoteSent(selectedQuote.id, clientId);
+
+    await recordQuoteSent(selectedQuote.id);   // clientId will be added 
 
 
-    await saveClientId(clientId);
+    // await saveClientId(clientId);                // will be added later on
 
     // Fetch category names based on categoryIds
     const categoryIdsArray = selectedQuote.categoryId.split(",");
