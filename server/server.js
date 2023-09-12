@@ -131,12 +131,11 @@ async function fetchCategoryNames(categoryIds) {
 app.get("/v1/quote", async (req, res) => {
   console.log("Random Quote Request Received");
 
-  const clientId = req.query.clientId;
   const categoryIds = req.query.categoryIds;
 
   try {
     console.log("Fetching sent quote IDs...");
-    const sentQuoteIds = await fetchSentQuoteIds(clientId);
+    const sentQuoteIds = await fetchSentQuoteIds();
 
     console.log("Fetching unsent quotes...");
     let unsentQuotes;
@@ -155,17 +154,10 @@ app.get("/v1/quote", async (req, res) => {
 
     console.log("Selecting a random quote...");
     const selectedQuote = getRandomQuote(unsentQuotes);
-    console.log("Recording sent quote...");
-
-    await recordQuoteSent(selectedQuote.id);   // clientId will be added 
-
-
-    // await saveClientId(clientId);                // will be added later on
 
     // Fetch category names based on categoryIds
     const categoryIdsArray = selectedQuote.categoryId.split(",");
     const categoryNames = await fetchCategoryNames(categoryIdsArray);
-
 
     console.log("Sending response...");
     res.json({
@@ -179,6 +171,7 @@ app.get("/v1/quote", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
 app.get("/categories", (req, res) => {
   const sql = "SELECT name FROM categories";  // only names were selected 
   dbPool.query(sql, (err, result) => {
