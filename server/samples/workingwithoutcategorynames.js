@@ -5,10 +5,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mysql = require("mysql2"); // Import MySQL module
-const dbPool = require("./db"); // Import connection pool from db.js
+const dbPool = require("../db"); // Import connection pool from db.js
 const app = express();
-const apiKey = require("../api-key"); // Path to API KEY
-const heapdumpModule = require("./snapshots/heapdumpModule"); // Import heapdumpModule, adjust the path as needed
+const apiKey = require("../../api-key"); // Path to API KEY
+const heapdumpModule = require("../snapshots/heapdumpModule"); // Import heapdumpModule, adjust the path as needed
 
 // Middleware to validate API key and hostname
 app.use((req, res, next) => {
@@ -34,23 +34,23 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Async function to save client ID
-async function saveClientId(clientId) {
-  if (!clientId) {
-    console.log("ClientId not provided. Skipping database insertion.");
-    return;
-  }
-  return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO client_ids (clientId) VALUES (?)";
-    dbPool.query(sql, [clientId], (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        console.log("ClientId saved in the database.");
-        resolve();
-      }
-    });
-  });
-}
+// async function saveClientId(clientId) {
+//   if (!clientId) {
+//     console.log("ClientId not provided. Skipping database insertion.");
+//     return;
+//   }
+//   return new Promise((resolve, reject) => {
+//     const sql = "INSERT INTO client_ids (clientId) VALUES (?)";
+//     dbPool.query(sql, [clientId], (err, result) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         console.log("ClientId saved in the database.");
+//         resolve();
+//       }
+//     });
+//   });
+// }
 async function fetchSentQuoteIds(clientId) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
@@ -60,6 +60,27 @@ async function fetchSentQuoteIds(clientId) {
       } else {
         const sentQuoteIds = result.map((row) => row.quoteId);
         resolve(sentQuoteIds);
+      }
+    });
+  });
+}
+async function fetchAuthorName(authorId) {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT q.text AS quote, a.name AS author
+      FROM quotes AS q
+      JOIN authors AS a ON q.authorId = a.id
+      WHERE q.id = ?;
+    `;
+    dbPool.query(sql, [authorId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (result.length > 0) {
+          resolve(result[0].author); // Get the author's name from the query result
+        } else {
+          reject(new Error("Author not found"));
+        }
       }
     });
   });
@@ -101,10 +122,10 @@ function getRandomQuote(quotes) {
   return quotes[randomIndex];
 }
 
-async function recordQuoteSent(quoteId, clientId) {
+async function recordQuoteSent(quoteId) {      // clientId can be added here 
   return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO sent_quotes (quoteId, clientId) VALUES (?, ?)";
-    dbPool.query(sql, [quoteId, clientId], (err, result) => {
+    const sql = "INSERT INTO sent_quotes (quoteId) VALUES (?)";
+    dbPool.query(sql, [quoteId], (err, result) => {
       if (err) {
         reject(err);
       } else {
@@ -128,15 +149,14 @@ async function fetchCategoryNames(categoryIds) {
   });
 }
 // Example route that uses the connection pool
-app.get("/v1/quote/random", async (req, res) => {
+app.get("/v1/quote", async (req, res) => {
   console.log("Random Quote Request Received");
 
-  const clientId = req.query.clientId;
   const categoryIds = req.query.categoryIds;
 
   try {
     console.log("Fetching sent quote IDs...");
-    const sentQuoteIds = await fetchSentQuoteIds(clientId);
+    const sentQuoteIds = await fetchSentQuoteIds();
 
     console.log("Fetching unsent quotes...");
     let unsentQuotes;
@@ -155,20 +175,23 @@ app.get("/v1/quote/random", async (req, res) => {
 
     console.log("Selecting a random quote...");
     const selectedQuote = getRandomQuote(unsentQuotes);
-    console.log("Recording sent quote...");
-    await recordQuoteSent(selectedQuote.id, clientId);
 
-    await saveClientId(clientId);
+    // Fetch the author's name by joining the quotes table with the authors table
+    const authorId = selectedQuote.authorId;
+    const authorName = await fetchAuthorName(authorId);
 
     // Fetch category names based on categoryIds
-    const categoryNames = await fetchCategoryNames(
-      selectedQuote.categoryId.split(",")
-    );
+    let categoryIdsArray = typeof selectedQuote.categoryId === 'string' ? selectedQuote.categoryId.split(",") : [];
+    if (categoryIdsArray.length === 0) {
+      categoryIdsArray = [-1]; // Provide a placeholder value, e.g., -1
+    }
+
+    const categoryNames = await fetchCategoryNames(categoryIdsArray);
 
     console.log("Sending response...");
     res.json({
-      quote: selectedQuote.quote,
-      author: selectedQuote.author,
+      quote: selectedQuote.text,
+      author: authorName, // Include the author's name
       imageUrl: selectedQuote.imageUrl,
       categoryNames: categoryNames,
     });
@@ -177,17 +200,16 @@ app.get("/v1/quote/random", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
 app.get("/categories", (req, res) => {
-  const sql = "SELECT * FROM categories";
+  const sql = "SELECT name FROM categories";  // only names were selected 
   dbPool.query(sql, (err, result) => {
     if (err) {
       console.error("Error fetching categories:", err);
       res.status(500).json({ error: "Error fetching categories" });
     } else {
-      const categories = result.map((category) => ({
-        name: category.name,
-      }));
-      res.json({ categories });
+      const categoryNames = result.map((category) => category.name);
+      res.json(categoryNames); // Send category names as a list of strings * 
     }
   });
 });
