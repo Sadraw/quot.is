@@ -157,9 +157,13 @@ app.get("/v1/quote", async (req, res) => {
 
     // Fetch category names based on categoryIds
     // const categoryIdsArray = selectedQuote.categoryId.split(",");
-    const categoryIdsArray = typeof selectedQuote.categoryId === 'string' ? selectedQuote.categoryId.split(",") : [];
-    const categoryNames = await fetchCategoryNames(categoryIdsArray);
+    let categoryIdsArray = typeof selectedQuote.categoryId === 'string' ? selectedQuote.categoryId.split(",") : [];
+    if (categoryIdsArray.length === 0) {
+      // Handle the case when there are no category IDs
+      categoryIdsArray = [-1]; // Provide a placeholder value, e.g., -1
+    }
 
+    const categoryNames = await fetchCategoryNames(categoryIdsArray);
 
     console.log("Sending response...");
     res.json({
