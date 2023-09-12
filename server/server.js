@@ -157,7 +157,7 @@ app.get("/v1/quote", async (req, res) => {
 
     // Fetch the author's name by joining the quotes table with the authors table
     const authorId = selectedQuote.authorId;
-    const authorName = await fetchAuthorName(authorId); // Replace with your function to fetch author's name
+    const authorName = await fetchAuthorName(authorId);
 
     // Fetch category names based on categoryIds
     let categoryIdsArray = typeof selectedQuote.categoryId === 'string' ? selectedQuote.categoryId.split(",") : [];
