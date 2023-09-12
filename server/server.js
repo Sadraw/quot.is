@@ -156,8 +156,10 @@ app.get("/v1/quote", async (req, res) => {
     const selectedQuote = getRandomQuote(unsentQuotes);
 
     // Fetch category names based on categoryIds
-    const categoryIdsArray = selectedQuote.categoryId.split(",");
+    // const categoryIdsArray = selectedQuote.categoryId.split(",");
+    const categoryIdsArray = typeof selectedQuote.categoryId === 'string' ? selectedQuote.categoryId.split(",") : [];
     const categoryNames = await fetchCategoryNames(categoryIdsArray);
+
 
     console.log("Sending response...");
     res.json({
