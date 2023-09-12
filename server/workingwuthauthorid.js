@@ -101,7 +101,8 @@ function getRandomQuote(quotes) {
   return quotes[randomIndex];
 }
 
-async function recordQuoteSent(quoteId) {      // clientId can be added here 
+async function recordQuoteSent(quoteId) {
+  // clientId can be added here
   return new Promise((resolve, reject) => {
     const sql = "INSERT INTO sent_quotes (quoteId) VALUES (?)";
     dbPool.query(sql, [quoteId], (err, result) => {
@@ -155,13 +156,14 @@ app.get("/v1/quote", async (req, res) => {
     console.log("Selecting a random quote...");
     const selectedQuote = getRandomQuote(unsentQuotes);
 
-    // Fetch the author's name by joining the quotes table with the authors table
-    const authorId = selectedQuote.authorId;
-    const authorName = await fetchAuthorName(authorId); // Replace with your function to fetch author's name
-
     // Fetch category names based on categoryIds
-    let categoryIdsArray = typeof selectedQuote.categoryId === 'string' ? selectedQuote.categoryId.split(",") : [];
+    // const categoryIdsArray = selectedQuote.categoryId.split(",");
+    let categoryIdsArray =
+      typeof selectedQuote.categoryId === "string"
+        ? selectedQuote.categoryId.split(",")
+        : [];
     if (categoryIdsArray.length === 0) {
+      // Handle the case when there are no category IDs
       categoryIdsArray = [-1]; // Provide a placeholder value, e.g., -1
     }
 
@@ -170,7 +172,7 @@ app.get("/v1/quote", async (req, res) => {
     console.log("Sending response...");
     res.json({
       quote: selectedQuote.text,
-      author: authorName, // Include the author's name
+      author: selectedQuote.authorId,
       imageUrl: selectedQuote.imageUrl,
       categoryNames: categoryNames,
     });
@@ -181,14 +183,14 @@ app.get("/v1/quote", async (req, res) => {
 });
 
 app.get("/categories", (req, res) => {
-  const sql = "SELECT name FROM categories";  // only names were selected 
+  const sql = "SELECT name FROM categories"; // only names were selected
   dbPool.query(sql, (err, result) => {
     if (err) {
       console.error("Error fetching categories:", err);
       res.status(500).json({ error: "Error fetching categories" });
     } else {
       const categoryNames = result.map((category) => category.name);
-      res.json(categoryNames); // Send category names as a list of strings * 
+      res.json(categoryNames); // Send category names as a list of strings *
     }
   });
 });
