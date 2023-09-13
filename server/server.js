@@ -57,7 +57,7 @@ async function fetchAuthorName(authorId) {
         reject(err);
       } else {
         if (result.length > 0) {
-          resolve(result[0].name);  //author
+          resolve(result[0].author);
         } else {
           reject(new Error("Author not found"));
         }
