@@ -1,16 +1,15 @@
 {
   "name": "quot.is",
-<<<<<<< HEAD
-  "version": "1.0.0",
+  "version": "2.0.4",
   "private": true,
   "description": "quot.is",
-  "author": "sadra",
+  "author": "Sadra Daneshmand",
   "keywords": [
-    "gatsby"
+    "quotes"
   ],
   "scripts": {
     "develop": "gatsby develop",
-    "start": "gatsby develop",
+    "start": "node server.js",
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
@@ -19,34 +18,7 @@
   "dependencies": {
     "gatsby": "^5.12.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.3.3",
-    "@types/react": "^18.2.14",
-    "@types/react-dom": "^18.2.6",
-    "typescript": "^5.1.6"
-=======
-  "version": "2.0.4",
-  "description": "quot.is",
-  "author": "Sadra Daneshmand",
-  "license": "GPL-2.0",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "main": "server.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Sadraw/quot.is.git"
-  },
-  "keywords": [
-    "quotes"
-  ],
-  "bugs": {
-    "url": "https://github.com/Sadraw/quot.is/issues"
-  },
-  "homepage": "https://github.com/Sadraw/quot.is#readme",
-  "dependencies": {
+    "react-dom": "^18.2.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -55,7 +27,20 @@
     "lru-cache": "^5.1.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.0",
-    "quot.is": "^2.0.10"
->>>>>>> c201b3495c03f185e33761eb11276a305286800a
-  }
+    "quot.is": "^2.0.10",
+    "@types/node": "^20.3.3",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "typescript": "^5.1.6"
+  },
+  "license": "GPL-2.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sadraw/quot.is.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sadraw/quot.is/issues"
+  },
+  "homepage": "https://github.com/Sadraw/quot.is#readme"
 }
