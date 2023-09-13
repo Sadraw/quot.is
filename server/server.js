@@ -49,7 +49,7 @@ async function fetchAuthorName(authorId) {
     const sql = `
       SELECT q.text AS quote, a.name AS author
       FROM quotes AS q
-      JOIN authors AS a ON q.authorId = a.id
+      JOIN authors AS a ON q.authorId = a.id 
       WHERE q.id = ?;
     `;
     dbPool.query(sql, [authorId], (err, result) => {
@@ -156,7 +156,7 @@ app.get("/v1/quote", async (req, res) => {
     const selectedQuote = getRandomQuote(unsentQuotes);
 
     const authorId = selectedQuote.authorId;
-    const authorName = await fetchAuthorName(authorId);       // HEEEEEEEEEEERE
+    const authorName = await fetchAuthorName(authorId.name);       // HEEEEEEEEEEERE
   
 
     const categoryIdsForSelectedQuote = [selectedQuote.categoryId]; // Fetch category for selected quote only
@@ -166,7 +166,7 @@ app.get("/v1/quote", async (req, res) => {
     
     res.json({
       quote: selectedQuote.text,
-      author: authorName.name,
+      author: authorName,
       imageUrl: selectedQuote.imageUrl,
       categories: categoryNames,
     });
