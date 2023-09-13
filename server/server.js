@@ -46,18 +46,13 @@ async function fetchSentQuoteIds(clientId) {
 
 async function fetchAuthorName(authorId) {
   return new Promise((resolve, reject) => {
-    const sql = `
-      SELECT q.text AS quote, a.name AS author
-      FROM quotes AS q
-      JOIN authors AS a ON q.authorId = a.id 
-      WHERE q.id = ?;
-    `;
+    const sql = "SELECT name FROM authors WHERE id = ?";
     dbPool.query(sql, [authorId], (err, result) => {
       if (err) {
         reject(err);
       } else {
         if (result.length > 0) {
-          resolve(result[0].author);
+          resolve(result[0].name);
         } else {
           reject(new Error("Author not found"));
         }
@@ -65,6 +60,27 @@ async function fetchAuthorName(authorId) {
     });
   });
 }
+// async function fetchAuthorName(authorId) {
+//   return new Promise((resolve, reject) => {
+//     const sql = `
+//       SELECT q.text AS quote, a.name AS author
+//       FROM quotes AS q
+//       JOIN authors AS a ON q.authorId = a.id 
+//       WHERE q.id = ?;
+//     `;
+//     dbPool.query(sql, [authorId], (err, result) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         if (result.length > 0) {
+//           resolve(result[0].author);
+//         } else {
+//           reject(new Error("Author not found"));
+//         }
+//       }
+//     });
+//   });
+// }
 
 async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
   return new Promise((resolve, reject) => {
