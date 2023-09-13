@@ -1,8 +1,13 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c201b3495c03f185e33761eb11276a305286800a
 node_modules/
 .cache/
 public
 src/gatsby-types.d.ts
+<<<<<<< HEAD
+=======
 =======
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
@@ -34,3 +39,4 @@ api-key.js
 api.env
 api.env.local
 >>>>>>> 21bceb9ea17aec745cb02fb997059d8c901eb4e4
+>>>>>>> c201b3495c03f185e33761eb11276a305286800a

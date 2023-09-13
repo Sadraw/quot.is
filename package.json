@@ -1,5 +1,32 @@
 {
   "name": "quot.is",
+<<<<<<< HEAD
+  "version": "1.0.0",
+  "private": true,
+  "description": "quot.is",
+  "author": "sadra",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "gatsby": "^5.12.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.3",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "typescript": "^5.1.6"
+=======
   "version": "2.0.4",
   "description": "quot.is",
   "author": "Sadra Daneshmand",
@@ -29,5 +56,6 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.6.0",
     "quot.is": "^2.0.10"
+>>>>>>> c201b3495c03f185e33761eb11276a305286800a
   }
 }
