@@ -162,11 +162,12 @@ app.get("/v1/quote", async (req, res) => {
     const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
 
     console.log("Sending response...");
+    
     res.json({
       quote: selectedQuote.text,
-      author: authorName,
+      author: authorName.name,
       imageUrl: selectedQuote.imageUrl,
-      Categories: categoryNames,
+      categories: categoryNames,
     });
   } catch (error) {
     console.error("Error while fetching and sending a quote:", error);
