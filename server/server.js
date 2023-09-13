@@ -57,7 +57,7 @@ async function fetchAuthorName(authorId) {
         reject(err);
       } else {
         if (result.length > 0) {
-          resolve(result[0].author);
+          resolve(result[0].name);  //author
         } else {
           reject(new Error("Author not found"));
         }
@@ -156,7 +156,8 @@ app.get("/v1/quote", async (req, res) => {
     const selectedQuote = getRandomQuote(unsentQuotes);
 
     const authorId = selectedQuote.authorId;
-    const authorName = await fetchAuthorName(authorId);
+    const authorName = await fetchAuthorName(authorId);       // HEEEEEEEEEEERE
+  
 
     const categoryIdsForSelectedQuote = [selectedQuote.categoryId]; // Fetch category for selected quote only
     const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
