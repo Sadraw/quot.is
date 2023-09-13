@@ -156,8 +156,8 @@ app.get("/v1/quote", async (req, res) => {
     const selectedQuote = getRandomQuote(unsentQuotes);
 
     const authorId = selectedQuote.authorId;
-    const authorName = await fetchAuthorName(authorId);       // HEEEEEEEEEEERE
-    const AuthorExactName = await fetchAuthorName(authorName.name);
+    const authorName = await fetchAuthorName(authorId); // Get author's exact name
+    // const AuthorExactName = await fetchAuthorName(authorName.name);
 
     const categoryIdsForSelectedQuote = [selectedQuote.categoryId]; // Fetch category for selected quote only
     const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
@@ -166,7 +166,7 @@ app.get("/v1/quote", async (req, res) => {
     
     res.json({
       quote: selectedQuote.text,
-      author: AuthorExactName,
+      author: authorName,
       imageUrl: selectedQuote.imageUrl,
       categories: categoryNames,
     });
