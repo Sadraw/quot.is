@@ -181,7 +181,8 @@ app.get("/v1/quote", async (req, res) => {
       quote: selectedQuote.text,
       author: authorName,
       imageUrl: authorInfo.imageUrl, // Use author's imageUrl,
-      categories: categoryNames,
+      // categories: categoryNames,
+      categories: categoryNames.map((name) => ({ name })), // Format categories as an array of objects
     });
   } catch (error) {
     console.error("Error while fetching and sending a quote:", error);
