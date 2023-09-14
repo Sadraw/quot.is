@@ -30,6 +30,23 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(cors());
 
+async function fetchAuthorInfo(authorId) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT name, imageUrl FROM authors WHERE id = ?";
+    dbPool.query(sql, [authorId], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (result.length > 0) {
+          resolve(result[0]);
+        } else {
+          reject(new Error("Author not found"));
+        }
+      }
+    });
+  });
+}
+
 async function fetchSentQuoteIds(clientId) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT quoteId FROM sent_quotes WHERE clientId = ?";
@@ -152,6 +169,7 @@ app.get("/v1/quote", async (req, res) => {
 
     const authorId = selectedQuote.authorId;
     const authorName = await fetchAuthorName(authorId); // Get author's exact name
+    const authorInfo = await fetchAuthorInfo(authorId);
     // const AuthorExactName = await fetchAuthorName(authorName.name);
 
     const categoryIdsForSelectedQuote = [selectedQuote.categoryId]; // Fetch category for selected quote only
@@ -162,7 +180,7 @@ app.get("/v1/quote", async (req, res) => {
     res.json({
       quote: selectedQuote.text,
       author: authorName,
-      imageUrl: selectedQuote.imageUrl,
+      imageUrl: authorInfo.imageUrl, // Use author's imageUrl,
       categories: categoryNames,
     });
   } catch (error) {
