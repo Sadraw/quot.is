@@ -1,0 +1,68 @@
+/* src/styles/App.css */
+header {
+    color: #d11616;
+    padding: 10px 0;
+    font-size: 22px;
+    animation: fadeIn 3.2s ease; /* Define the fadeIn animation */
+
+}
+
+.nav-menu {
+    font-family: 'Montserrat', sans-serif; /* Replace with your chosen font */
+    display: flex;
+    justify-content: flex-end;
+    /* Align menu items to the right */
+    align-items: center;
+    padding-right: 20px;
+    position: relative;
+    /* Add position relative for animation */
+}
+
+/* Define animation for sliding in from right to left */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        /* Start off-screen to the right */
+        opacity: 0;
+        /* Initially invisible */
+    }
+
+    to {
+        transform: translateX(0);
+        /* Slide in to the left */
+        opacity: 1;
+        /* Fully visible */
+    }
+}
+
+.nav-menu ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    animation: slideIn 1.5s ease forwards;
+    /* Apply the animation */
+}
+
+.nav-menu li {
+    margin: 0 10px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #141414;
+    transition: color 0.33s ease;
+
+    &:hover {
+        color: #007acc;
+    }
+}
+
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0; /* Start with opacity 0 */
+    }
+    100% {
+      opacity: 1; /* End with opacity 1 (fully visible) */
+    }
+  }
