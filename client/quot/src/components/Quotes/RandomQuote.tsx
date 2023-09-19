@@ -11,7 +11,9 @@ const RandomQuote = () => {
   useEffect(() => {
     const apiUrl = "https://api.quot.is/v1/quote";
 
+
     // making the api request to the server
+    console.log("API Request Started");
     fetch(apiUrl, {
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -19,6 +21,7 @@ const RandomQuote = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("API Request Successful", data);
         // update the state with the api response data
         setQuote(data.quote);
         setAuthor(data.author);
