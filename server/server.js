@@ -28,6 +28,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+// Enable CORS for all routes
 app.use(cors());
 
 async function fetchAuthorInfo(authorId) {
