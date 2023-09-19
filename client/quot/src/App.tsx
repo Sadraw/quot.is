@@ -13,7 +13,7 @@ function App() {
 
         <Routes>
           <Route path="/" element= {<HeroSection />} />  
-          <Route path="/quot/src/components/Quotes/RandomQuote.tsx" element={<RandomQuote />} />
+          <Route path="/Random-Quote" element={<RandomQuote />} />
         </Routes>    
         
       </div>
