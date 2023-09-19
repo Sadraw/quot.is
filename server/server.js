@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 
 // modify cors usage to allow specific origins 
 const corsOptions = {
-  origin: "*",
+  origin: "https://quot.is/Random-Quote",
   optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
 
 
