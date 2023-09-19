@@ -20,6 +20,7 @@
     cursor:default;
     margin-bottom: 20px;
     transition: color 0.3s ease;    
+    
 }
 .hero h1:hover{
     color: #59afe9;
