@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/RandomQuote.css";
-import apiKey from "../../../api-key.js"
+import apiKey from "../../api-key";
 
 const RandomQuote = () => {
   const [quote, setQuote] = useState("");
