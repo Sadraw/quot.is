@@ -27,21 +27,9 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(bodyParser.json());
-
-// modify cors usage to allow specific origins 
-const corsOptions = {
-  origin: "https://quot.is",
-  optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
-
-
-};
-
 // Enable CORS for all routes
-app.use(cors(corsOptions));
-
-
+app.use(cors());
 
 
 async function fetchAuthorInfo(authorId) {
@@ -190,8 +178,7 @@ app.get("/v1/quote", async (req, res) => {
     const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
 
     console.log("Sending response...");
-    res.setHeader("Access-Control-Allow-Origin", "https://api.quot.is/v1/quote");
-
+    
     res.json({
       quote: selectedQuote.text,
       author: authorName,
