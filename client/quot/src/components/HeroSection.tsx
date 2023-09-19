@@ -10,7 +10,7 @@ const HeroSection = () => {
           <h1>Welcome to quot.is</h1>
           <p>Your Source for Inspiring Quotes and Captivating Facts</p>
           <Link
-            to="/Random-Quote"
+            to="/random-quote"
             className="cta-button"
           >
             Get Started

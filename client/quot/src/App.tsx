@@ -13,7 +13,7 @@ function App() {
 
         <Routes>
           <Route path="/" element= {<HeroSection />} />  
-          <Route path="/Random-Quote" element={<RandomQuote />} />
+          <Route path="/random-quote" element={<RandomQuote />} />
         </Routes>    
         
       </div>
