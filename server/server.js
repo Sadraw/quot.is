@@ -190,7 +190,7 @@ app.get("/v1/quote", async (req, res) => {
     const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
 
     console.log("Sending response...");
-    res.setHeader("Access-Control-Allow-Origin", "https://quot.is/Random-Quote");
+    res.setHeader("Access-Control-Allow-Origin", "https://quot.is");
 
     res.json({
       quote: selectedQuote.text,
