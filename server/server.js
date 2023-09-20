@@ -1,5 +1,6 @@
 // Required modules
 const fs = require("fs");
+const fetch = require("node-fetch"); // Add this import at the beginning of your server.js file
 require("dotenv").config();
 const https = require("https");
 const express = require("express");
@@ -11,7 +12,6 @@ const app = express();
 const heapdumpModule = require("./snapshots/heapdumpModule");
 const apiKey = process.env.API_KEY;
 
-console.log("API Key:", apiKey);
 // Middleware to validate API key and hostname
 app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
