@@ -1,5 +1,6 @@
 // Required modules
 const fs = require("fs");
+require('dotenv').config();
 const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,8 +8,8 @@ const cors = require("cors");
 const mysql = require("mysql2");
 const dbPool = require("./db");
 const app = express();
-const apiKey = require("../api-key");
 const heapdumpModule = require("./snapshots/heapdumpModule");
+const apiKey = process.env.API_KEY;
 
 // Middleware to validate API key and hostname
 app.use((req, res, next) => {
