@@ -179,6 +179,14 @@ async function fetchCategoryNames(categoryIds) {
   });
 }
 
+app.get("/", (req, res) => {
+  res.send("Hello, this is the Quot API!");
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
 app.get("/v1/quote", async (req, res) => {
   console.log("Random Quote Request Received");
 
