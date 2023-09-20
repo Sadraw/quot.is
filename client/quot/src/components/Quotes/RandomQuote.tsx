@@ -8,7 +8,7 @@ const RandomQuote = () => {
   const [categories, setCategories] = useState("");
 
   useEffect(() => {
-    const apiUrl = "/random-quote"; // Use the server-side route
+    const apiUrl = "https://api.quot.is/random-quote"; // Use the server-side route
 
     console.log("API Request Started");
     fetch(apiUrl)
@@ -20,10 +20,8 @@ const RandomQuote = () => {
         setImageUrl(data.imageUrl);
         setCategories(data.categories);
       })
-      
       .catch((error) => {
         console.error("Error fetching data:", error);
-        console.log("Error stack trace:", error.stack);
       });
   }, []);
 
