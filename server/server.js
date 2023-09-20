@@ -42,30 +42,7 @@ const corsOptions = {
 // Enable CORS for all routes
 app.use(cors(corsOptions));
 
-// Define a new endpoint to proxy requests to the external API
-app.get("/random-quote", async (req, res) => {
-  try {
-    const apiUrl = "https://quot.is/random-quote"; // Replace with the external API URL
 
-    // Make a request to the external API using your API key
-    const response = await fetch(apiUrl, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Request to external API failed with status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    res.json(data);
-  } catch (error) {
-    console.error("Error while fetching and sending a quote:", error);
-    res.status(500).json({ error: "An error occurred" });
-  }
-});
 
 
 async function fetchAuthorInfo(authorId) {
@@ -179,13 +156,58 @@ async function fetchCategoryNames(categoryIds) {
   });
 }
 
-app.get("/", (req, res) => {
-  res.send("Hello, this is the Quot API!");
+
+// Define a new endpoint to proxy requests to the external API for /random-quote
+app.get("/random-quote", async (req, res) => {
+  console.log("Random Quote Request Received");
+
+  const categoryIds = req.query.categoryIds;
+
+  try {
+    console.log("Fetching sent quote IDs...");
+    const sentQuoteIds = await fetchSentQuoteIds();
+
+    console.log("Fetching unsent quotes...");
+    let unsentQuotes;
+    if (categoryIds) {
+      const categoryIdsArray = categoryIds.split(",");
+      console.log("Category IDs:", categoryIdsArray);
+      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, categoryIdsArray);
+    } else {
+      unsentQuotes = await fetchUnsentQuotes(sentQuoteIds, []);
+    }
+
+    if (unsentQuotes.length === 0) {
+      return res.status(404).json({ error: "No unsent quotes available" });
+    }
+
+    console.log("Selecting a random quote...");
+    const selectedQuote = getRandomQuote(unsentQuotes);
+
+    const authorId = selectedQuote.authorId;
+    const authorName = await fetchAuthorName(authorId); // Get author's exact name
+    const authorInfo = await fetchAuthorInfo(authorId);
+    // const AuthorExactName = await fetchAuthorName(authorName.name);
+
+    const categoryIdsForSelectedQuote = [selectedQuote.categoryId]; // Fetch category for selected quote only
+    const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
+
+    console.log("Sending response...");
+    res.setHeader("Access-Control-Allow-Origin", "https://quot.is");
+
+    res.json({
+      quote: selectedQuote.text,
+      author: authorName,
+      imageUrl: authorInfo.imageUrl, // Use author's imageUrl,
+      // categories: categoryNames,
+      categories: categoryNames.map((name) => ({ name })), // Format categories as an array of objects
+    });
+  } catch (error) {
+    console.error("Error while fetching and sending a quote:", error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
 
 app.get("/v1/quote", async (req, res) => {
   console.log("Random Quote Request Received");
