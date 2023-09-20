@@ -8,7 +8,7 @@ const RandomQuote = () => {
   const [categories, setCategories] = useState("");
 
   useEffect(() => {
-    const apiUrl = "/random-quote"; // Use the server-side route
+    const apiUrl = "api.quot.is/random-quote"; // Use the server-side route
 
     console.log("API Request Started");
     fetch(apiUrl)
