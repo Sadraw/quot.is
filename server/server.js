@@ -156,7 +156,6 @@ async function fetchCategoryNames(categoryIds) {
   });
 }
 
-
 // Define a new endpoint to proxy requests to the external API for /random-quote
 app.get("/random-quote", async (req, res) => {
   console.log("Random Quote Request Received");
@@ -164,20 +163,8 @@ app.get("/random-quote", async (req, res) => {
   const categoryIds = req.query.categoryIds;
 
   try {
-
-    const apiUrl = "https://api.quot.is/random-quote"; // Replace with the external API URL
-
     console.log("Fetching sent quote IDs...");
-
     const sentQuoteIds = await fetchSentQuoteIds();
-    
-    const response = await fetch(apiUrl);
-
-    if (!response.ok) {
-      throw new Error(`Request to external API failed with status: ${response.status}`);
-    }
-
-    const data = await response.json();
 
     console.log("Fetching unsent quotes...");
     let unsentQuotes;
@@ -219,7 +206,6 @@ app.get("/random-quote", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
-
 
 app.get("/v1/quote", async (req, res) => {
   console.log("Random Quote Request Received");
