@@ -6,6 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mysql = require("mysql2");
+const fetch = require("node-fetch"); // Add this require statement for making requests to external APIs
 const dbPool = require("./db");
 const app = express();
 const heapdumpModule = require("./snapshots/heapdumpModule");
@@ -29,22 +30,43 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(bodyParser.json());
 
-// modify cors usage to allow specific origins 
+// Modify cors usage to allow specific origins
 const corsOptions = {
   origin: "https://quot.is/",
   optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
-
-
 };
 
 // Enable CORS for all routes
 app.use(cors(corsOptions));
 
+// Define a new endpoint to proxy requests to the external API
+app.get("/random-quote", async (req, res) => {
+  try {
+    const apiUrl = "https://quot.is/random-quote"; // Replace with the external API URL
 
+    // Make a request to the external API using your API key
+    const response = await fetch(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
 
+    if (!response.ok) {
+      throw new Error(
+        `Request to external API failed with status: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+
+    res.json(data);
+  } catch (error) {
+    console.error("Error while fetching and sending a quote:", error);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
 
 async function fetchAuthorInfo(authorId) {
   return new Promise((resolve, reject) => {
@@ -77,7 +99,8 @@ async function fetchSentQuoteIds(clientId) {
   });
 }
 
-async function fetchAuthorName(authorId) {  //works now 
+async function fetchAuthorName(authorId) {
+  //works now
   return new Promise((resolve, reject) => {
     const sql = "SELECT name FROM authors WHERE id = ?";
     dbPool.query(sql, [authorId], (err, result) => {
@@ -96,7 +119,8 @@ async function fetchAuthorName(authorId) {  //works now
 
 async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
   return new Promise((resolve, reject) => {
-    let sql = "SELECT q.*, c.name AS categoryName FROM quotes q LEFT JOIN categories c ON q.categoryId = c.id";
+    let sql =
+      "SELECT q.*, c.name AS categoryName FROM quotes q LEFT JOIN categories c ON q.categoryId = c.id";
     const placeholders = [];
 
     if (sentQuoteIds.length > 0) {
@@ -206,7 +230,6 @@ app.get("/v1/quote", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
-
 
 app.get("/categories", (req, res) => {
   const sql = "SELECT name FROM categories";
