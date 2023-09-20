@@ -1,5 +1,6 @@
 // Required modules
 const fs = require("fs");
+require("dotenv").config();
 const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,9 +8,10 @@ const cors = require("cors");
 const mysql = require("mysql2");
 const dbPool = require("./db");
 const app = express();
-const apiKey = require("../api-key");
 const heapdumpModule = require("./snapshots/heapdumpModule");
+const apiKey = process.env.API_KEY;
 
+console.log("API Key:", apiKey);
 // Middleware to validate API key and hostname
 app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
@@ -27,9 +29,21 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use(bodyParser.json());
+
+// modify cors usage to allow specific origins 
+const corsOptions = {
+  origin: "https://quot.is/",
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11) choke on 204
+
+
+};
+
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors(corsOptions));
+
+
 
 
 async function fetchAuthorInfo(authorId) {
@@ -178,7 +192,8 @@ app.get("/v1/quote", async (req, res) => {
     const categoryNames = await fetchCategoryNames(categoryIdsForSelectedQuote);
 
     console.log("Sending response...");
-    
+    res.setHeader("Access-Control-Allow-Origin", "https://quot.is");
+
     res.json({
       quote: selectedQuote.text,
       author: authorName,
