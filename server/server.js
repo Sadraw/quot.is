@@ -1,6 +1,6 @@
 // Required modules
 const fs = require("fs");
-require("dotenv").config({ path: "./api.env" });
+require("dotenv").config();
 const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
