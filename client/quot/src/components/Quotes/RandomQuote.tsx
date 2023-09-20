@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/RandomQuote.css";
-import apiKey from "../../api-key";
 
 const RandomQuote = () => {
   const [quote, setQuote] = useState("");
@@ -9,20 +8,13 @@ const RandomQuote = () => {
   const [categories, setCategories] = useState("");
 
   useEffect(() => {
-    const apiUrl = "https://api.quot.is/v1/quote";
+    const apiUrl = "/random-quote"; // Use the server-side route
 
-
-    // making the api request to the server
     console.log("API Request Started");
-    fetch(apiUrl, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    })
+    fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
         console.log("API Request Successful", data);
-        // update the state with the api response data
         setQuote(data.quote);
         setAuthor(data.author);
         setImageUrl(data.imageUrl);
@@ -31,7 +23,7 @@ const RandomQuote = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []); // Empty dependency array to run only once when mounted
+  }, []);
 
   return (
     <section className="RandomQuote">
