@@ -20,6 +20,7 @@
     "lru-cache": "^5.1.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.5.2",
+    "node-fetch": "^3.3.2",
     "pac-resolver": ">=4.2.1",
     "quot.is": "^2.0.7",
     "semver": "^7.5.4",
