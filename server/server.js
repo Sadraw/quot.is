@@ -1,6 +1,6 @@
 // Required modules
 const fs = require("fs");
-require("dotenv").config({ path: "/server/api.env" });
+require("dotenv").config({ path: "./api.env" });
 const https = require("https");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -11,6 +11,7 @@ const app = express();
 const heapdumpModule = require("./snapshots/heapdumpModule");
 const apiKey = process.env.API_KEY;
 
+console.log("API Key:", apiKey);
 // Middleware to validate API key and hostname
 app.use((req, res, next) => {
   const clientApiKey = req.header("Authorization");
