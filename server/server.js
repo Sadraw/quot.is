@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mysql = require("mysql2");
 const dbPool = require("./db");
-import fetch from "node-fetch";
+const fetch = require("node-fetch");
 const app = express();
 const heapdumpModule = require("./snapshots/heapdumpModule");
 const apiKey = process.env.API_KEY;
