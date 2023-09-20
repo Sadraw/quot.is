@@ -1,0 +1,58 @@
+.about-page {
+    display: flex;
+    justify-content: space-between; /* Distribute columns evenly */
+    max-width: 1200px; /* Adjust as needed */
+    margin: 0 auto; /* Center the columns horizontally */
+    animation: fadeIn 3.2s ease; /* Define the fadeIn animation */
+
+  }
+.column{
+    flex: 1; /* Let both columns grow equally */
+    padding: 10px; /* Add some padding between columns */
+    box-sizing: border-box; /* Include padding in column width calculation */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Center text horizontally */
+}
+.Sadra{
+    width: 100%;
+    max-width: 400px; /* Adjust maximum width as needed */
+    height: 400px;
+    image-rendering: crisp-edges;
+    border-radius: 50%;
+    
+
+
+    
+}
+.Sadra h2 {
+
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(73, 56, 90);
+    font-size: 40px;
+    width: 440px;
+
+}
+
+.Ali{
+    width: 100%;
+    max-width: 400px; /* Adjust maximum width as needed */
+    height: 400px;
+    border-radius: 50%;
+}
+.Ali h2{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 40px;
+    width: 100%;
+}
+
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0; /* Start with opacity 0 */
+    }
+    100% {
+      opacity: 1; /* End with opacity 1 (fully visible) */
+    }
+  }
