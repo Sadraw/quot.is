@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import apiKey from "./api-key";
+import apiKey from "../../api-key";
 import "../../styles/RandomQuote.css"
 
 
