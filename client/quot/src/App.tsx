@@ -5,6 +5,8 @@ import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
 import RandomQuote from "./components/Quotes/RandomQuote";
 import Team from "./components/Pages/Team";
+import About from "./components/Pages/About";
+import Blog from "./components/Pages/Blog";
 
 function App() {
   return (
@@ -15,9 +17,9 @@ function App() {
         <Routes>
           <Route path="/" element= {<HeroSection />} />  
           <Route path="/random-quote" element={<RandomQuote />} />
-          {/* <Route path="/blog" element={<Blog />} /> */}
+          <Route path="/blog" element={<Blog />} />
           <Route path="/team" element={<Team />} />
-          {/* <Route path="/about" element={<About />} /> */}
+          <Route path="/about" element={<About />} />
 
 
         </Routes>    

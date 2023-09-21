@@ -1,38 +1,42 @@
-.RandomQuote{
+.RandomQuote {
     /* background-image: url('https://jordanandeddie.files.wordpress.com/2014/05/salinger-feature.jpg'); */
     background-size: cover;
     background-position: top;
     color: #3f3e3e;
     text-align: center;
     padding: 190px 0;
-    animation: fadeIn 3.2s ease; /* Define the fadeIn animation */
+    animation: fadeIn 3.2s ease;
+    /* Define the fadeIn animation */
 }
 
 .RandomQuote-content {
     max-width: 850px;
     margin: 0 auto;
-    
+
 }
 
-.RandomQuote h1{
+.RandomQuote h1 {
     margin-top: -110px;
     font-size: 4rem;
-    cursor:default;
+    cursor: default;
     margin-bottom: 70px;
-    transition: color 0.3s ease;    
-    
+    transition: color 0.3s ease;
+
 }
-.RandomQuote h1:hover{
+
+.RandomQuote h1:hover {
     color: #a83417;
-    font-size: 4.1rem;
-    font-weight: bold;    
+    font-weight: bold;
+    transition: color 0.7s ease;
+
 }
 
 .RandomQuote p {
     font-size: 1.4rem;
     margin-bottom: 30px;
-    cursor:default;
-    transition: color 0.3s ease;    
+    cursor: default;
+    transition: color 0.3s ease;
+
     &:hover {
         color: #9944d1;
         font-weight: bold;
@@ -41,18 +45,19 @@
     }
 }
 
-.cta-button{
+.cta-button {
     background-color: #f74444;
     color: #fff;
     font-size: 1.2rem;
     padding: 20px 30px;
-    border: none;   
+    border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;    
+    transition: background-color 0.3s ease;
     text-decoration: none;
 
 }
+
 .cta-button:hover {
     background-color: #ff9900;
     color: #3f3e3e;
@@ -63,9 +68,178 @@
 
 @keyframes fadeIn {
     0% {
-      opacity: 0; /* Start with opacity 0 */
+        opacity: 0;
+        /* Start with opacity 0 */
     }
+
     100% {
-      opacity: 1; /* End with opacity 1 (fully visible) */
+        opacity: 1;
+        /* End with opacity 1 (fully visible) */
     }
-  }
+}
+
+
+
+
+
+.letter-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+
+.animated-mail {
+    position: absolute;
+    height: 150px;
+    width: 200px;
+    -webkit-transition: .4s;
+    -moz-transition: .4s;
+    transition: .4s;
+
+    .body {
+        position: absolute;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 0 100px 200px;
+        border-color: transparent transparent #e95f55 transparent;
+        z-index: 2;
+    }
+
+    .top-fold {
+        position: absolute;
+        top: 50px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 50px 100px 0 100px;
+        -webkit-transform-origin: 50% 0%;
+        -webkit-transition: transform .4s .4s, z-index .2s .4s;
+        -moz-transform-origin: 50% 0%;
+        -moz-transition: transform .4s .4s, z-index .2s .4s;
+        transform-origin: 50% 0%;
+        transition: transform .4s .4s, z-index .2s .4s;
+        border-color: #cf4a43 transparent transparent transparent;
+        z-index: 2;
+    }
+
+    .back-fold {
+        position: absolute;
+        bottom: 0;
+        width: 200px;
+        height: 100px;
+        background: #cf4a43;
+        z-index: 0;
+    }
+
+    .left-fold {
+        position: absolute;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 50px 0 50px 100px;
+        border-color: transparent transparent transparent #e15349;
+        z-index: 2;
+    }
+
+    .letter {
+        left: 20px;
+        bottom: 0px;
+        position: absolute;
+        width: 160px;
+        height: 60px;
+        background: white;
+        z-index: 1;
+        overflow: hidden;
+        -webkit-transition: .4s .2s;
+        -moz-transition: .4s .2s;
+        transition: .4s .2s;
+
+        .letter-border {
+            height: 10px;
+            width: 100%;
+            background: repeating-linear-gradient(-45deg,
+                    #cb5a5e,
+                    #cb5a5e 8px,
+                    transparent 8px,
+                    transparent 18px);
+        }
+
+        .letter-title {
+            margin-top: 10px;
+            margin-left: 5px;
+            height: 10px;
+            width: 40%;
+            background: #cb5a5e;
+        }
+
+        .letter-context {
+            margin-top: 10px;
+            margin-left: 5px;
+            height: 10px;
+            width: 20%;
+            background: #cb5a5e;
+        }
+
+        .letter-stamp {
+            margin-top: 30px;
+            margin-left: 120px;
+            border-radius: 100%;
+            height: 30px;
+            width: 30px;
+            background: #cb5a5e;
+            opacity: 0.3;
+        }
+    }
+}
+
+.shadow {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    width: 400px;
+    height: 30px;
+    transition: .4s;
+    transform: translateX(-50%);
+    -webkit-transition: .4s;
+    -webkit-transform: translateX(-50%);
+    -moz-transition: .4s;
+    -moz-transform: translateX(-50%);
+
+    border-radius: 100%;
+    background: radial-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0));
+}
+
+.letter-image:hover {
+    .animated-mail {
+        transform: translateY(50px);
+        -webkit-transform: translateY(50px);
+        -moz-transform: translateY(50px);
+    }
+
+    .animated-mail .top-fold {
+        transition: transform .4s, z-index .2s;
+        transform: rotateX(180deg);
+        -webkit-transition: transform .4s, z-index .2s;
+        -webkit-transform: rotateX(180deg);
+        -moz-transition: transform .4s, z-index .2s;
+        -moz-transform: rotateX(180deg);
+        z-index: 0;
+    }
+
+    .animated-mail .letter {
+        height: 180px;
+    }
+
+    .shadow {
+        width: 250px;
+    }
+}
