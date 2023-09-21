@@ -15,7 +15,10 @@ function App() {
         <Routes>
           <Route path="/" element= {<HeroSection />} />  
           <Route path="/random-quote" element={<RandomQuote />} />
+          {/* <Route path="/blog" element={<Blog />} /> */}
           <Route path="/team" element={<Team />} />
+          {/* <Route path="/about" element={<About />} /> */}
+
 
         </Routes>    
         
