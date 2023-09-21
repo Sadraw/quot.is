@@ -14,7 +14,7 @@ const Header = () => {
                     <li> <a href="/blog">Blog</a></li>
                     <li> <a href="/team">Team</a></li>
                     <li> <a href="/about">About</a></li>
-                    <li> <a href="https://github.com/Sadraw/quot.is">Github</a></li>
+                    <li> <a href="https://github.com/Sadraw/quot.is" target="_blank">Github</a></li>
 
 
                 </ul>
