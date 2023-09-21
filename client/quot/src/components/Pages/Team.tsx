@@ -1,9 +1,9 @@
 import React from "react";
-import "../../styles/About.css";
+import "../../styles/Team.css";
 import AliZeynali from "../../Images/Ali.png";
 import SadraDaneshmand from "../../Images/Sadra.png";
 
-const About = () => {
+const Team = () => {
   return (
     <div className="about-page">
 
@@ -33,4 +33,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Team;
