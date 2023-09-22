@@ -1,22 +1,23 @@
 import React from "react";
 import "../../styles/Team.css";
-import AliZeynali from "../../Images/Ali.png";
-import SadraDaneshmand from "../../Images/Sadra.png";
+import AliZeynali from "../../Images/Ali.jpg";
+import SadraDaneshmand from "../../Images/Sadra.jpg";
 import Github from "../../Images/github-mark/github-mark.svg"
 import Linkedin from "../../Images/Linkedin/icons8-linkedin-100.svg"
 
 const Team = () => {
   return (
-    <div className="about-page">
+    <div className="team-page">
 
       <div className="column">
 
-        <div className="Sadra">
+        <div className="Sadra ">
 
           <h2>Sadra Daneshmand</h2>
-
-          <img className="Sadra" src={SadraDaneshmand} alt="Sadra Daneshmand" />
-
+          
+          <div className="image-bg-effect">
+          <img className="Sadra " src={SadraDaneshmand} alt="Sadra Daneshmand" />
+          </div>
           <h3>
             
             Full-Stack Web-Developer
@@ -46,8 +47,10 @@ const Team = () => {
 
           <h2>Ali Zeynali</h2>
 
-          <img className="Ali" src={AliZeynali} alt="Sadra Daneshmand" />
+          <div className="image-bg-effect">
 
+          <img className="Ali" src={AliZeynali} alt="Ali Zeynali" />
+          </div>
           <h3>Android Developer</h3>
         </div>
 
