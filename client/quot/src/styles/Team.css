@@ -1,4 +1,4 @@
-.about-page {
+.team-page {
   display: flex;
   justify-content: space-between;
   /* Distribute columns evenly */
@@ -20,17 +20,18 @@
   text-align: center; /* Center text and child elements horizontally */
   justify-content: center;
   margin-top: auto;
-  margin-top: -27px;
+  margin-top: -30px;
   
 }
 
 .Sadra {
-  width: 81%;
+  width: 79.5%;
   max-width: 100%;
   /* Adjust maximum width as needed */
   max-height: 100%;
   image-rendering: optimizeQuality;
   border-radius: 50%;
+  
   
 }
 
@@ -39,15 +40,24 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-align: center;
   color: rgb(83, 73, 73);
-  font-size: 34px;
+  font-size: 42px;
   width: 100%;
+  transition: color 0.7s ease;
 
+}
 
+.Sadra h2:hover{
+  color: #651892;
+  /* font-size: 4.1rem; */
 }
 
 .Sadra h3 {
   font-size: 28px;
 
+}
+.Sadra h3:hover{
+  transition: color 1.7s ease;
+  color: white;
 }
 
 
@@ -68,25 +78,35 @@
   font-weight: bold;
   text-align: center;
   color: rgb(83, 73, 73);
-  font-size: 34px;
+  font-size: 42px;
   width: 100%;
+  transition: color 0.7s ease;
 
 }
 
+.Ali h2:hover{
+  color: #a81611;
+  /* font-size: 4.1rem; */
+}
 .Ali h3 {
   font-size: 28px;
+}
+.Ali h3:hover{
+  transition: color 1.7s ease;
+  color: white;
 }
 
 img {
   max-width: 85%;
   max-height: 100%;
-  transition: transform 0.3s ease; /* Add a transition for smooth scaling */
-  animation: fadeIn 3.2s ease-in;
-
+  transition: transform 0.5s ease, filter 0.5s ease-in-out; /* Add both transitions */
+  animation: fadeIn 2.2s ease;
+  filter: grayscale(100%); /* Initially grayscale */
 }
 
 img:hover{
   transform: scale(1.15); /* Scale the image to 1.1 times its original size on hover */
+  filter: grayscale(0%); /* Color on hover */
 }
 
 .AliSocial , .SadraSocial{ 
@@ -95,49 +115,13 @@ img:hover{
   align-items: center;
   max-width: 55%;
   max-height: 80%;
-  animation: fadeIn 3.8s ease-in;
+  animation: fadeIn 2.7s ease-in;
   
 }
 
 
 
-h2::before {
-  transform: scaleX(0);
-  transform-origin: bottom right;
-}
 
-h2:hover::before {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-.Sadra h2::before {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  inset: 0 0 0 0;
-  background: hsl(157, 94%, 56%);
-  z-index: -1;
-  transition: transform .8s ease;
-}
-
-.Ali h2::before {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  inset: 0 0 0 0;
-  background: hsl(202, 82%, 56%);
-  z-index: -1;
-  transition: transform .8s ease;
-}
 
 h2 {
   position: relative;
@@ -166,9 +150,9 @@ h3:hover::before {
   bottom: 0;
   left: 0;
   inset: 0 0 0 0;
-  background: hsl(157, 94%, 56%);
+  background:   #651892;
   z-index: -1;
-  transition: transform .8s ease;
+  transition: transform 1.8s ease;
 }
 
 .Ali h3::before {
@@ -180,9 +164,9 @@ h3:hover::before {
   bottom: 0;
   left: 0;
   inset: 0 0 0 0;
-  background: hsl(202, 82%, 56%);
+  background:  #a81611;
   z-index: -1;
-  transition: transform .8s ease;
+  transition: transform 1.8s ease;
 }
 
 h3 {
@@ -230,3 +214,6 @@ h3 {
     /* Adjust font size for smaller screens */
   }
 }
+
+
+
