@@ -40,9 +40,7 @@ const About = () => {
 
         <h2>The Lowdown</h2>
           <p>
-          So what exactly is quot.is? Imagine a place where inspiration, wisdom, and laughter collide in a symphony of epic proportions. That's us! We're the party people of the wisdom world. Think of quot.is as the place where curiosity goes to have a blast! 🎉
-          You'll find more quotes here than you can shake a proverbial stick at. We're talking quotes that'll empower you to conquer mountains, quotes that'll uplift your spirits when life hands you lemons, and quotes that'll motivate you to do things you never thought possible. And that's just the tip of the iceberg!
-          But wait, there's more! We've got fun facts that'll make your jaw drop so low it might touch your toes. Ever wanted to impress your friends with random tidbits about the world? We've got your back! Dive into our trove of fascinating fun facts, and you'll be the life of the party in no time. 🤓
+          Quot.is is where inspiration, wisdom, and humor come together for a fantastic experience! We're your go-to source for empowering quotes, uplifting spirits, and mind-blowing fun facts. Get ready to conquer mountains, turn lemons into lemonade, and discover things you never knew. We're your ticket to a world of knowledge and amusement! 🎉🤓
           </p>
 
       </div>
