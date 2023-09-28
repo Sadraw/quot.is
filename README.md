@@ -77,15 +77,92 @@ The base URL for all API endpoints is `https://api.quot.is`.
     }
   ]
 }
+```
 
-All requests to this API require authentication using an API key. Include your API key in the `Authorization` header as follows:
+#### Get a Random Quote (Version 1)
 
-Authorization: Bearer YOUR_API_KEY
+    URL: /v1/quote
+    Method: GET
+    Description: Get a random quote from the Quot.is platform (version 1).
+    Parameters:
+        categoryIds (optional): Comma-separated list of category IDs to filter quotes by category.
+    Response:
+
+```json
+
+{
+  "quote": "The quote text goes here",
+  "author": "Author Name",
+  "imageUrl": "https://example.com/author-image.jpg",
+  "categories": [
+    {
+      "name": "Category Name"
+    }
+  ]
+}
+```
+#### Get Categories
+
+    URL: /categories
+    Method: GET
+    Description: Get a list of all available categories.
+    Response:
+
+```json
+
+[
+  "Category Name 1",
+  "Category Name 2",
+  // ...
+]
+```
+
+
+#### Example Usage
+
+
+```java
+const fetch = require("node-fetch");
+
+const API_KEY = "YOUR_API_KEY";
+const BASE_URL = "https://api.quot.is";
+
+async function getRandomQuote(categoryIds) {
+  const url = new URL(`${BASE_URL}/random-quote`);
+  if (categoryIds) {
+    url.searchParams.append("categoryIds", categoryIds.join(","));
+  }
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    console.log(data);
+  } else {
+    console.error("Failed to fetch a random quote:", response.statusText);
+  }
+}
+
+
+// Example usage:
+getRandomQuote(["1", "2"]);
+```
+#### Error Handling
+
+    If there is an error, the API will respond with a JSON object containing an error field with an error message.
+
+#### Notes
+
+    All responses include CORS headers to allow requests from https://quot.is.
+
 
 
 ## License
 
 quot.is is open-source software licensed under the [**ISC License**](LICENSE). Feel free to use, modify, and distribute the code while adhering to the terms of the ISC License.
 
-![quot.is](https://socialify.git.ci/Sadraw/quot.is/image?font=Jost&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Dark)
->>>>>>> c201b3495c03f185e33761eb11276a305286800a
