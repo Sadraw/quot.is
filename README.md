@@ -8,9 +8,11 @@
 
 ## Description
 
-**quot.is** is a delightful platform that offers a collection of inspiring quotes and captivating fun facts to spark curiosity and ignite inspiration. It's a gateway to endless wisdom, where users can access thoughtfully curated quotes and intriguing facts that **enlighten**, **motivate**, and **entertain**.
+Welcome to **quot.is**, a **delightful** platform that brings together a collection of inspiring quotes and captivating fun facts. Our mission is to spark curiosity and ignite inspiration, providing a gateway to endless wisdom. Users can explore thoughtfully curated quotes and intriguing facts that enlighten, motivate, and entertain.
 
-## Website
+## Explore Our Platform
+
+## [Website](https://quot.is)
 
 The **quot.is** website showcases a beautifully designed and interactive platform that provides a seamless browsing experience to explore a vast collection of quotes and fun facts.
 
