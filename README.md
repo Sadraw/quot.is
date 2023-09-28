@@ -36,9 +36,6 @@ quot.is is the result of a collaborative effort by the following two developers:
 1. [Ali Zeynali](https://github.com/alizeyn)
 2. [Sadra Daneshmand](https://github.com/Sadraw)
 
-## Contributing
-
-We welcome contributions from the open-source community. If you'd like to contribute to quot.is, please follow the guidelines outlined in the [**CONTRIBUTING.md**](CONTRIBUTING.md) file.
 
 ## API Reference
 
@@ -162,7 +159,6 @@ getRandomQuote(["1", "2"]);
 
 
 
-## License
+## Contributing
 
-quot.is is open-source software licensed under the [**ISC License**](LICENSE). Feel free to use, modify, and distribute the code while adhering to the terms of the ISC License.
-
+We welcome contributions from the open-source community. If you'd like to contribute to quot.is, please follow the guidelines outlined in the [**CONTRIBUTING.md**](CONTRIBUTING.md) file.
