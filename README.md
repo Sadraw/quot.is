@@ -40,6 +40,49 @@ quot.is is the result of a collaborative effort by the following two developers:
 
 We welcome contributions from the open-source community. If you'd like to contribute to quot.is, please follow the guidelines outlined in the [**CONTRIBUTING.md**](CONTRIBUTING.md) file.
 
+## API Reference
+
+This API provides random quotes from the Quot.is platform.
+
+### Base URL
+
+The base URL for all API endpoints is `https://api.quot.is`.
+
+### Authentication
+
+#### Error Responses
+
+- `401 Unauthorized` - When the API key is missing or invalid.
+- `404 Not Found` - When the requested domain is not `api.quot.is`.
+
+### Endpoints
+
+#### Get a Random Quote
+
+- **URL**: `/random-quote`
+- **Method**: `GET`
+- **Description**: Get a random quote from the Quot.is platform.
+- **Parameters**:
+  - `categoryIds` (optional): Comma-separated list of category IDs to filter quotes by category.
+- **Response**:
+
+```json
+{
+  "quote": "The quote text goes here",
+  "author": "Author Name",
+  "imageUrl": "https://example.com/author-image.jpg",
+  "categories": [
+    {
+      "name": "Category Name"
+    }
+  ]
+}
+
+All requests to this API require authentication using an API key. Include your API key in the `Authorization` header as follows:
+
+Authorization: Bearer YOUR_API_KEY
+
+
 ## License
 
 quot.is is open-source software licensed under the [**ISC License**](LICENSE). Feel free to use, modify, and distribute the code while adhering to the terms of the ISC License.
