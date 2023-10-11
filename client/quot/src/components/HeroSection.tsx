@@ -11,7 +11,7 @@ const HeroSection = () => {
           <p>Your Source for Inspiring Quotes and Captivating Facts</p>
           <Link
             to="/random-quote"
-            className="cta-button"
+            className="hero-cta-button"
           >
             Get Started
           </Link>
