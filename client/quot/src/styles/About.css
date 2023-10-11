@@ -2,21 +2,21 @@
 
 /* Define a background color for the entire section */
 .about-section {
-    background-color: #f59494;
+    background-color: #000000;
     padding: 20px;
 }
 
 /* Style the main heading */
 h2 {
     font-size: 2rem;
-    color: #333;
+    color: #f7f7f7;
 }
 
 /* Style the paragraphs */
 p {
     font-size: 1.3rem;
     line-height: 1.5;
-    color: #666;
+    color: #f1eeee;
 }
 
 /* Style the rows */
@@ -27,7 +27,7 @@ p {
 .revolution-row {
     padding: 20px;
     margin-bottom: 20px;
-    background-color: #fff;
+    background-color: #020202;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
@@ -41,7 +41,7 @@ p {
 .revolution-row:hover {
     transform: scale(1.02);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    background-color: #f5f5f5;
+    background-color: #020202;
     color: black;
     
 }
@@ -56,11 +56,11 @@ p {
 }
 
 /* Add a subtle animation for headings */
-h2 {
+.deal-row, .lowdown-row, .universe-row, .cherry-row, .revolution-row h2 {
     animation: fadeInUp 1.2s ease;
 }
 
-p {
+.deal-row, .lowdown-row, .universe-row, .cherry-row, .revolution-row p {
     animation: fadeInUp 2s ease;
 }
 
@@ -73,7 +73,7 @@ p {
     align-items: center;
     gap: 20px;
     padding: 20px;
-    background-color: #fff;
+    background-color: #131313;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     opacity: 0;
@@ -110,8 +110,8 @@ p {
 .team-button {
     margin-top: 20px;
     margin-bottom: 20px;
-    background-color: #b89c9c;
-    color: #fff;
+    background-color: #444343;
+    color: #ffffff;
     font-size: 1.2rem;
     padding: 20px 30px;
     border: none;
@@ -124,9 +124,9 @@ p {
 }
 
 .team-button:hover {
-    background-color: #ff9900;
-    color: #3f3e3e;
-    transition: background-color .8s ease;
+    background-color: #f7f5f5;
+    color: #0e0d0d;
+    transition: background-color 1.2s ease;
 }
 
 .team-button-p{

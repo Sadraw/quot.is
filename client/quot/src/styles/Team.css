@@ -1,4 +1,8 @@
+body {
+  background-color: black;
+}
 .team-page {
+  
   display: flex;
   justify-content: space-between;
   /* Distribute columns evenly */
@@ -39,7 +43,7 @@
 .Sadra h2 {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-align: center;
-  color: rgb(83, 73, 73);
+  color: rgb(252, 252, 252);
   font-size: 42px;
   width: 100%;
   transition: color 0.7s ease;
@@ -53,11 +57,13 @@
 
 .Sadra h3 {
   font-size: 28px;
+  color: white;
+  transition: color 1.32s ease; /* Add a transition for the color change */
+
 
 }
 .Sadra h3:hover{
-  transition: color 1.7s ease;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 
@@ -77,7 +83,7 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   text-align: center;
-  color: rgb(83, 73, 73);
+  color: rgb(248, 248, 248);
   font-size: 42px;
   width: 100%;
   transition: color 0.7s ease;
@@ -90,14 +96,15 @@
 }
 .Ali h3 {
   font-size: 28px;
+  color: white;
+  transition: color 1.32s ease; /* Add a transition for the color change */
 }
 .Ali h3:hover{
-  transition: color 1.7s ease;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 img {
-  max-width: 85%;
+  max-width: 65%;
   max-height: 100%;
   transition: transform 0.5s ease, filter 0.5s ease-in-out; /* Add both transitions */
   animation: fadeIn 2.2s ease;
@@ -110,12 +117,25 @@ img:hover{
 }
 
 .AliSocial , .SadraSocial{ 
+  background-color: #fffdfd;
   display: flex; /* Add this to make them flex containers */
   justify-content: center; /* Horizontally center their contents */
   align-items: center;
-  max-width: 55%;
-  max-height: 80%;
+  max-width: 40%;
+  max-height: 100%;
+  width: 30%;
+  height: 80px;
   animation: fadeIn 2.7s ease-in;
+  border-radius: 40px;
+  transition: background-color 0.5s ease; /* Add a smooth transition for background color change */  
+}
+
+.AliSocial:hover {
+  background-color: #ee5e59;
+  
+}
+.SadraSocial:hover {
+  background-color: #bf7ae7;
   
 }
 
@@ -194,7 +214,7 @@ h3 {
 
 @media (max-width: 768px) {
   .column {
-    padding: 4px;
+    padding: 5px;
     /* Adjust padding for smaller screens */
   }
 

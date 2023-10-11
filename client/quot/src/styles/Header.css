@@ -18,22 +18,7 @@ header {
     /* Add position relative for animation */
 }
 
-/* Define animation for sliding in from right to left */
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        /* Start off-screen to the right */
-        opacity: 0;
-        /* Initially invisible */
-    }
 
-    to {
-        transform: translateX(0);
-        /* Slide in to the left */
-        opacity: 1;
-        /* Fully visible */
-    }
-}
 
 .nav-menu ul {
     list-style: none;
@@ -49,7 +34,7 @@ header {
 
 .nav-menu a {
     text-decoration: none;
-    color: #141414;
+    color: #ffffff;
     transition: color 0.33s ease;
 
     &:hover {
@@ -66,3 +51,20 @@ header {
       opacity: 1; /* End with opacity 1 (fully visible) */
     }
   }
+
+  /* Define animation for sliding in from right to left */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        /* Start off-screen to the right */
+        opacity: 0;
+        /* Initially invisible */
+    }
+
+    to {
+        transform: translateX(0);
+        /* Slide in to the left */
+        opacity: 1;
+        /* Fully visible */
+    }
+}

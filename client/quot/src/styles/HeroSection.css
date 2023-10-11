@@ -2,64 +2,74 @@
     background-image: url('https://jordanandeddie.files.wordpress.com/2014/05/salinger-feature.jpg');
     background-size: cover;
     background-position: top;
-    color: #3f3e3e;
     text-align: center;
-    padding: 190px 0;
+    padding: 180px 0;
     animation: fadeIn 3.2s ease;
+
     /* Define the fadeIn animation */
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
 
 }
 
 .hero h1 {
-    margin-top: 95px;
-    font-size: 4rem;
+    color: #1d1c1c;
+    display: flex;
+    justify-content: center; /* Horizontally center their contents */
+    align-items: center;
+    margin-top: 90px;
+    margin-bottom: -10px;
+    font-size: 5rem;
     cursor: default;
-    margin-bottom: 20px;
     transition: color 0.7s ease;
+    animation: fadeIn 3.2s ease;
+
 
 }
 
 .hero h1:hover {
-    color: #1b5c86;
+    color: #205d86;
     font-weight: bold;
     /* font-size: 4.1rem; */
 
 }
 
 .hero p {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
+    font-size: 1.56rem;
+    margin-bottom: 50px;
     cursor: default;
+    color: #1d1c1c;
     transition: color 0.7s ease;
+    animation: fadeInUp 2s ease;
+
 
     &:hover {
-        color: #1b5c86;
+        color: #205d86;
         /* font-size: 1.5rem; */
 
     }
 }
 
-.cta-button {
-    background-color: #f74444;
+.hero-cta-button {
+    background-color: #070707;
     color: #fff;
     font-size: 1.2rem;
     padding: 20px 30px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    animation: fadeIn 2.2s ease;
+    transition: background-color 0.7s ease-in-out;
     text-decoration: none;
 
 }
 
-.cta-button:hover {
-    background-color: #ff9900;
-    color: #3f3e3e;
+.hero-cta-button:hover {
+    background-color: #eceae6;
+    color: #000000;
     transition: background-color .8s ease;
 }
 
