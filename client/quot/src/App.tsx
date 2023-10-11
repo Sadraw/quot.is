@@ -7,6 +7,9 @@ import RandomQuote from "./components/Quotes/RandomQuote";
 import Team from "./components/Pages/Team";
 import About from "./components/Pages/About";
 import Blog from "./components/Pages/Blog";
+import ToggleButton from "./components/ToggleButton";
+
+
 
 function App() {
   return (
