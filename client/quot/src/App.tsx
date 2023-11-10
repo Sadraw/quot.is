@@ -7,7 +7,7 @@ import RandomQuote from "./components/Quotes/RandomQuote";
 import Team from "./components/Pages/Team";
 import About from "./components/Pages/About";
 import Blog from "./components/Pages/Blog";
-
+import Privacy from "./components/Pages/Privacy";
 
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/team" element={<Team />} />
           <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<Privacy />} />
 
 
         </Routes>    
