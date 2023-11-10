@@ -138,16 +138,12 @@ img:hover{
   background-color: #bf7ae7;
   
 }
-
-
-
-
-
-h2 {
-  position: relative;
-  cursor: default;
-  animation: fadeIn 2.2s ease;
-
+@media (max-width: 768px) {
+  .create-post-container {
+      max-width: 90%;
+      left: 5%;
+  }
+}
 }
 
 h3::before {
