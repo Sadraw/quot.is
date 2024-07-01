@@ -90,7 +90,7 @@ async function fetchAuthorName(authorId) {  //works now
         }
       }
     });
-  });
+  });kear
 }
 
 async function fetchUnsentQuotes(sentQuoteIds, categoryIds) {
